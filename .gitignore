@@ -1,0 +1,89 @@
+############################
+# Unity
+############################
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+
+# Asset meta data
+!/[Aa]ssets/**/*.meta
+!/[Pp]ackages/**/*.meta
+
+# Addressables
+ServerData/
+
+############################
+# IDEs
+############################
+
+.vscode/
+.idea/
+.vs/
+
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+############################
+# OS files
+############################
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
+
+############################
+# Logs
+############################
+
+*.log
+
+############################
+# Archives
+############################
+
+*.zip
+*.tar
+*.gz
+*.rar
+
+############################
+# Crash dumps
+############################
+
+*.stackdump
+
+############################
+# Environment files
+############################
+
+.env
+.env.*
+
+############################
+# Optional
+############################
+
+# Uncomment if you don't want local screenshots
+# Screenshots/
+
+# Uncomment if you generate profiling captures
+# *.data
+# *.trace

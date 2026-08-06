@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30e34d28a0e4e46869845e2f757f802d, type: 3}
+  m_Name: Dialogue_LoreTerminalThermal
+  m_EditorClassIdentifier: 
+  speakerName: Thermal Log Terminal
+  lines:
+  - 'INCIDENT LOG 114-C: Containment core entered thermal runaway during an unattended
+    overnight run.'
+  - 'Post-mortem: the core vents heat in bursts. Between bursts it is briefly defenceless.'
+  - 'Recommendation to future teams: do not out-damage it. Wait for the vent.'

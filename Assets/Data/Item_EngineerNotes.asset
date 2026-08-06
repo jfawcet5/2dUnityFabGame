@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 453374cc3ec8b4dafa56886fb7371005, type: 3}
+  m_Name: Item_EngineerNotes
+  m_EditorClassIdentifier: 
+  id: engineer_notes_01
+  displayName: Engineer Notes
+  color: {r: 0.8, g: 0.7, b: 0.5, a: 1}
+  description: Handwritten notes, tucked away where a supervisor wouldn't find them.
+  category: 1
+  isKeyItem: 0
+  icon: {fileID: 21300000, guid: aef609913eea54f6bb14cadabed9cc5d, type: 3}
+  chipSlot: 0
+  processorBehavior: 0
+  batteryBonus: 0
+  cacheBonus: 0
+  coolingCostMultiplier: 1
+  coolingRegenMultiplier: 1
+  damageMultiplier: 1
+  projectileSizeMultiplier: 1
+  moveSpeedMultiplier: 1
+  reloadSpeedMultiplier: 1
+  fireRateMultiplier: 1
+  projectileSpeedMultiplier: 1
+  projectileCount: 1
+  homing: 0
+  chipOutputDescription: 
+  chipTradeoffDescription: 
