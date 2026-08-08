@@ -19,7 +19,7 @@ MonoBehaviour:
     running.
   category: 1
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: 5c374ecee99d041209cf55952da926e7, type: 3}
+  icon: {fileID: 21300000, guid: 2b0919bac0c2f429daff7c3e04b2ca08, type: 3}
   chipSlot: 0
   processorBehavior: 0
   batteryBonus: 0

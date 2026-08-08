@@ -33,7 +33,7 @@ namespace BeyProject.Combat
         [SerializeField] private CombatObjectiveType objective = CombatObjectiveType.DefeatAllEnemies;
         [SerializeField] private string objectiveAnnouncement = "";
 
-        private int remainingEnemies;
+        [SerializeField]  private int remainingEnemies;
         private int remainingGenerators;
         private int remainingTurrets;
         private int remainingSwitches;
@@ -51,6 +51,9 @@ namespace BeyProject.Combat
         {
             foreach (EnemyBase enemy in FindObjectsOfType<EnemyBase>())
             {
+                if (enemy.GetIsDefeated()) {
+                    continue;
+                }
                 remainingEnemies++;
                 enemy.Defeated += HandleEnemyDefeated;
             }

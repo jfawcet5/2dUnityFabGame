@@ -19,7 +19,7 @@ MonoBehaviour:
     it with 'do not repeat.'
   category: 1
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: dd3ae9034d5e6445f8b8ec5d242ac255, type: 3}
+  icon: {fileID: 21300000, guid: 2b0919bac0c2f429daff7c3e04b2ca08, type: 3}
   chipSlot: 0
   processorBehavior: 0
   batteryBonus: 0

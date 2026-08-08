@@ -246,9 +246,9 @@ MonoBehaviour:
   newGameButton: {fileID: 1444429657}
   continueButton: {fileID: 1836903322}
   quitButton: {fileID: 2083251823}
-  startingRoomScene: Lobby
-  startingSpawnPointId: lobby_start
-  startingFallbackPosition: {x: 3.5, y: 3.5}
+  startingRoomScene: StartRoom
+  startingSpawnPointId: start_room_entry
+  startingFallbackPosition: {x: 2.5, y: 4.5}
 --- !u!4 &724987440
 Transform:
   m_ObjectHideFlags: 0

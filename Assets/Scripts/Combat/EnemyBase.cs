@@ -362,5 +362,10 @@ namespace BeyProject.Combat
                 playerHealth.TakeDamage(contactDamage, transform.position);
             }
         }
+
+        public bool GetIsDefeated()
+        {
+            return SaveSystem.Instance != null && SaveSystem.Instance.HasFlag($"enemy_defeated_{enemyId}");
+        }
     }
 }

@@ -18,7 +18,7 @@ MonoBehaviour:
   description: An old process recipe pulled from a lithography terminal.
   category: 1
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: 6321514f6a5214a03aaa74bdb0dbf740, type: 3}
+  icon: {fileID: 21300000, guid: 2b0919bac0c2f429daff7c3e04b2ca08, type: 3}
   chipSlot: 0
   processorBehavior: 0
   batteryBonus: 0
