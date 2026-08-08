@@ -19,7 +19,7 @@ MonoBehaviour:
     - if you can live with two shots.
   category: 5
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: 92699f56b1ee94592a6833667bf79290, type: 3}
+  icon: {fileID: 21300000, guid: 102bb969a1f304d14bae317974f900f3, type: 3}
   chipSlot: 1
   processorBehavior: 0
   batteryBonus: 0

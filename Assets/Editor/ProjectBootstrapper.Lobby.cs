@@ -33,7 +33,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("lobby_from_startroom", fromStartRoomSpawn);
 
             CreateCamera(startSpawn);
-            CreatePlayer(startSpawn, characters.player);
+            CreatePlayer(startSpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Lobby");

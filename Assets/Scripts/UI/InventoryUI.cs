@@ -115,6 +115,7 @@ namespace BeyProject.UI
             rowGO.transform.SetParent(parent, false);
             rowGO.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.06f);
             rowGO.GetComponent<LayoutElement>().preferredHeight = 40f;
+            rowGO.GetComponent<LayoutElement>().minHeight = 40f;
 
             var iconGO = new GameObject("Icon", typeof(Image));
             iconGO.transform.SetParent(rowGO.transform, false);

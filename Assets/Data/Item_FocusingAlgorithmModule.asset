@@ -19,7 +19,7 @@ MonoBehaviour:
     and armoured targets.
   category: 5
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: 0535e3863b5e64d049fd1e1920bb27fd, type: 3}
+  icon: {fileID: 21300000, guid: 2d50caf4c19114b46b4d70708e838d6f, type: 3}
   chipSlot: 2
   processorBehavior: 2
   batteryBonus: 0

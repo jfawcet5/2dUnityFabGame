@@ -34,7 +34,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("boss_room_entry", entrySpawn);
 
             CreateCamera(entrySpawn);
-            CreatePlayer(entrySpawn, characters.player);
+            CreatePlayer(entrySpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Containment Core");

@@ -68,10 +68,11 @@ namespace BeyProject.EditorTools
             camGO.transform.position = focusPosition + new Vector3(0f, 0f, -10f);
         }
 
-        private static void CreatePlayer(Vector3 position, Sprite sprite)
+        private static void CreatePlayer(Vector3 position, Sprite sprite, PlayerAnimationSprites animation)
         {
             var playerGO = new GameObject("Player", typeof(Rigidbody2D), typeof(CircleCollider2D), typeof(SpriteRenderer),
-                typeof(HitFlash), typeof(PlayerController2D), typeof(PlayerInteractor), typeof(PlayerCombat), typeof(PlayerHealth));
+                typeof(HitFlash), typeof(PlayerController2D), typeof(PlayerInteractor), typeof(PlayerCombat), typeof(PlayerHealth),
+                typeof(PlayerAnimator));
             playerGO.tag = "Player";
             playerGO.transform.position = position;
 
@@ -92,6 +93,25 @@ namespace BeyProject.EditorTools
             healthSO.FindProperty("spriteRenderer").objectReferenceValue = renderer;
             healthSO.FindProperty("hitFlash").objectReferenceValue = flash;
             healthSO.ApplyModifiedPropertiesWithoutUndo();
+
+            var animatorSO = new SerializedObject(playerGO.GetComponent<PlayerAnimator>());
+            animatorSO.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            WriteSpriteArray(animatorSO.FindProperty("downFrames"), animation.down);
+            WriteSpriteArray(animatorSO.FindProperty("upFrames"), animation.up);
+            WriteSpriteArray(animatorSO.FindProperty("leftFrames"), animation.left);
+            WriteSpriteArray(animatorSO.FindProperty("rightFrames"), animation.right);
+            animatorSO.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void WriteSpriteArray(SerializedProperty arrayProp, Sprite[] entries)
+        {
+            entries ??= new Sprite[0];
+            arrayProp.arraySize = entries.Length;
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                arrayProp.GetArrayElementAtIndex(i).objectReferenceValue = entries[i];
+            }
         }
 
         private static void CreateSpawnPoint(string spawnId, Vector3 position)

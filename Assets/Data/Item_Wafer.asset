@@ -19,7 +19,7 @@ MonoBehaviour:
     made here.
   category: 2
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: 107eb22f0ef0e407a9b7e0c74a5d3be1, type: 3}
+  icon: {fileID: 21300000, guid: 35830b0495a8d4d789659128b9892059, type: 3}
   chipSlot: 0
   processorBehavior: 0
   batteryBonus: 0

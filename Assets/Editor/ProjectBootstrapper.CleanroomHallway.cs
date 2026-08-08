@@ -27,7 +27,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("hallway_from_storage", fromStorageSpawn);
 
             CreateCamera(fromLithoSpawn);
-            CreatePlayer(fromLithoSpawn, characters.player);
+            CreatePlayer(fromLithoSpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Cleanroom Hallway");

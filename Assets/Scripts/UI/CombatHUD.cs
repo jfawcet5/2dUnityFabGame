@@ -225,7 +225,6 @@ namespace BeyProject.UI
 
             if (boss == null)
             {
-                Debug.Log("Boss is null");
                 displayedBoss = 1f;
                 return;
             }

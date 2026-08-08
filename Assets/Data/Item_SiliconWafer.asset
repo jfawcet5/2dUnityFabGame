@@ -19,7 +19,7 @@ MonoBehaviour:
     do anything.
   category: 2
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: e865a423f7f604a29bc8e2b054558ac1, type: 3}
+  icon: {fileID: 21300000, guid: 35830b0495a8d4d789659128b9892059, type: 3}
   chipSlot: 0
   processorBehavior: 0
   batteryBonus: 0

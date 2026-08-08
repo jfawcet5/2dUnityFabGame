@@ -30,7 +30,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("litho_from_hallway", fromHallwaySpawn);
 
             CreateCamera(entranceSpawn);
-            CreatePlayer(entranceSpawn, characters.player);
+            CreatePlayer(entranceSpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Lithography");

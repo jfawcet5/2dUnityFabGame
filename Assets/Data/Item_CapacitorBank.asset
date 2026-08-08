@@ -19,7 +19,7 @@ MonoBehaviour:
     it can't sustain a heavy shot.
   category: 5
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: 3cac6e30b7f2a49e792ef27b42db5dcd, type: 3}
+  icon: {fileID: 21300000, guid: 8aea1f37ee87c40929ed8c85ae50a92b, type: 3}
   chipSlot: 0
   processorBehavior: 0
   batteryBonus: 30

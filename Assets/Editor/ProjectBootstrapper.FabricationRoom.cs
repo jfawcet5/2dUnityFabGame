@@ -27,7 +27,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("fabrication_room_from_combat", fromCombatSpawn);
 
             CreateCamera(fromExplorationSpawn);
-            CreatePlayer(fromExplorationSpawn, characters.player);
+            CreatePlayer(fromExplorationSpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Fabrication Room");

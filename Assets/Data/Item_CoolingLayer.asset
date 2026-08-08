@@ -19,7 +19,7 @@ MonoBehaviour:
     at the cost of rate of fire.
   category: 5
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: b090d13be8b6e4de7ac7447b57cd3b00, type: 3}
+  icon: {fileID: 21300000, guid: 9f4a84e63c2934cc08247e37d5c97aeb, type: 3}
   chipSlot: 3
   processorBehavior: 0
   batteryBonus: 0

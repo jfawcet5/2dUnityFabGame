@@ -19,7 +19,7 @@ MonoBehaviour:
     slows you down.
   category: 5
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: aad1b68e1fb194aa39c4c41400cd80f1, type: 3}
+  icon: {fileID: 21300000, guid: 541ec61075d4446969e077c2b341bdd2, type: 3}
   chipSlot: 0
   processorBehavior: 0
   batteryBonus: 60

@@ -19,7 +19,7 @@ MonoBehaviour:
     longer reload.
   category: 5
   isKeyItem: 0
-  icon: {fileID: 21300000, guid: 76af5c2910eb24e2d8f42deb92026628, type: 3}
+  icon: {fileID: 21300000, guid: 0946a7be970bd499eb47c6a0da2819f2, type: 3}
   chipSlot: 1
   processorBehavior: 0
   batteryBonus: 0

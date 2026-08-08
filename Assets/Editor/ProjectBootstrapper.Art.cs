@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -7,6 +8,9 @@ namespace BeyProject.EditorTools
 {
     public static partial class ProjectBootstrapper
     {
+        private const string PlayerSpriteSheetPath = "Assets/Art/BetaCharacterSpriteSheet.png";
+        private const int PlayerSpriteFrameSize = 32;
+
         private struct RoomTiles
         {
             public TileBase lobbyFloor;
@@ -23,9 +27,19 @@ namespace BeyProject.EditorTools
             public TileBase maintenanceBayFloor;
         }
 
+        /// <summary>Four walk frames per facing, sliced from the beta character sheet.</summary>
+        private struct PlayerAnimationSprites
+        {
+            public Sprite[] down;
+            public Sprite[] up;
+            public Sprite[] left;
+            public Sprite[] right;
+        }
+
         private struct CharacterSprites
         {
             public Sprite player;
+            public PlayerAnimationSprites playerAnimation;
             public Sprite receptionist;
             public Sprite floorSupervisor;
             public Sprite technician;
@@ -66,9 +80,14 @@ namespace BeyProject.EditorTools
 
         private static CharacterSprites BuildCharacterSprites()
         {
+            PlayerAnimationSprites playerAnimation = ImportPlayerAnimationSprites();
+            Sprite playerIdleSprite = FirstValidFrame(playerAnimation.down)
+                ?? GenerateCharacterSprite("char_player", new Color(0.2f, 0.5f, 0.95f));
+
             return new CharacterSprites
             {
-                player = GenerateCharacterSprite("char_player", new Color(0.2f, 0.5f, 0.95f)),
+                player = playerIdleSprite,
+                playerAnimation = playerAnimation,
                 receptionist = GenerateCharacterSprite("char_receptionist", new Color(0.6f, 0.6f, 0.9f)),
                 floorSupervisor = GenerateCharacterSprite("char_floor_supervisor", new Color(0.5f, 0.75f, 0.55f)),
                 technician = GenerateCharacterSprite("char_technician", new Color(0.55f, 0.75f, 0.85f)),
@@ -90,6 +109,95 @@ namespace BeyProject.EditorTools
                 combatSwitch = GeneratePixelSprite("prop_combat_switch", new Color(0.6f, 0.3f, 0.3f), PixelShape.Cross),
                 repairStation = GeneratePixelSprite("prop_repair_station", new Color(0.4f, 0.9f, 0.55f), PixelShape.Cross),
                 hazard = GenerateTileSprite("prop_hazard", new Color(1f, 1f, 1f), new Color(0.85f, 0.85f, 0.85f))
+            };
+        }
+
+        private static Sprite FirstValidFrame(Sprite[] frames)
+        {
+            return frames != null && frames.Length > 0 ? frames[0] : null;
+        }
+
+        /// <summary>
+        /// Slices the hand-placed beta character sheet (4 walk frames x 4 facings, 32px
+        /// frames) into named sub-sprites and configures pixel-art import settings on it.
+        /// spritePixelsPerUnit is set to the frame size (32), not the shared PixelsPerUnit
+        /// (16) used by the generated placeholder art, so one frame still equals one world
+        /// unit and the player doesn't render twice the size of everything else.
+        ///
+        /// Row order in the source image (top to bottom) is Right, Left, Down, Up - read
+        /// directly off the sheet: rows 0-1 are side profiles distinguished by which way the
+        /// held weapon points, rows 2-3 are the unambiguous front (two eyes) and back
+        /// (hair silhouette, no face) views.
+        /// </summary>
+        private static PlayerAnimationSprites ImportPlayerAnimationSprites()
+        {
+            var importer = (TextureImporter)AssetImporter.GetAtPath(PlayerSpriteSheetPath);
+            if (importer == null)
+            {
+                Debug.LogWarning($"ProjectBootstrapper: player sprite sheet not found at {PlayerSpriteSheetPath} - falling back to placeholder art.");
+                return default;
+            }
+
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Multiple;
+            importer.spritePixelsPerUnit = PlayerSpriteFrameSize;
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.alphaIsTransparency = true;
+            importer.mipmapEnabled = false;
+            importer.wrapMode = TextureWrapMode.Clamp;
+
+            string[] rowNames = { "Right", "Left", "Down", "Up" };
+            const int gridSize = 4;
+            int textureHeight = gridSize * PlayerSpriteFrameSize;
+            var metaData = new SpriteMetaData[gridSize * gridSize];
+
+            for (int row = 0; row < gridSize; row++)
+            {
+                // PNG rows run top-to-bottom; sprite rects are bottom-left origin, so row 0
+                // (top of the image) lands at the highest y.
+                int unityY = textureHeight - PlayerSpriteFrameSize - row * PlayerSpriteFrameSize;
+                for (int col = 0; col < gridSize; col++)
+                {
+                    metaData[row * gridSize + col] = new SpriteMetaData
+                    {
+                        name = $"BetaCharacterSpriteSheet_{rowNames[row]}_{col}",
+                        rect = new Rect(col * PlayerSpriteFrameSize, unityY, PlayerSpriteFrameSize, PlayerSpriteFrameSize),
+                        pivot = new Vector2(0.5f, 0.5f),
+                        alignment = (int)SpriteAlignment.Center
+                    };
+                }
+            }
+
+            importer.spritesheet = metaData;
+            EditorUtility.SetDirty(importer);
+            importer.SaveAndReimport();
+
+            var byName = new Dictionary<string, Sprite>();
+            foreach (Object asset in AssetDatabase.LoadAllAssetsAtPath(PlayerSpriteSheetPath))
+            {
+                if (asset is Sprite sprite)
+                {
+                    byName[sprite.name] = sprite;
+                }
+            }
+
+            Sprite[] FramesForRow(string rowName)
+            {
+                var frames = new Sprite[gridSize];
+                for (int col = 0; col < gridSize; col++)
+                {
+                    byName.TryGetValue($"BetaCharacterSpriteSheet_{rowName}_{col}", out frames[col]);
+                }
+                return frames;
+            }
+
+            return new PlayerAnimationSprites
+            {
+                right = FramesForRow("Right"),
+                left = FramesForRow("Left"),
+                down = FramesForRow("Down"),
+                up = FramesForRow("Up")
             };
         }
 

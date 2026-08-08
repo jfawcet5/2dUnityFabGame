@@ -23,7 +23,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("breakroom_entrance", entranceSpawn);
 
             CreateCamera(entranceSpawn);
-            CreatePlayer(entranceSpawn, characters.player);
+            CreatePlayer(entranceSpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Break Room");

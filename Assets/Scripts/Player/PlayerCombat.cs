@@ -50,17 +50,17 @@ namespace BeyProject.Player
 
         private void Awake()
         {
-            var indicatorGO = new GameObject("AimIndicator", typeof(SpriteRenderer));
-            indicatorGO.transform.SetParent(transform, false);
-            indicatorGO.transform.localScale = new Vector3(0.4f, 0.15f, 1f);
+            //var indicatorGO = new GameObject("AimIndicator", typeof(SpriteRenderer));
+            //indicatorGO.transform.SetParent(transform, false);
+            //indicatorGO.transform.localScale = new Vector3(0.4f, 0.15f, 1f);
 
-            SpriteRenderer renderer = indicatorGO.GetComponent<SpriteRenderer>();
-            renderer.sprite = PlaceholderSprite.SharedSquare();
-            renderer.color = new Color(1f, 0.9f, 0.3f);
-            renderer.sortingOrder = 6;
+            //SpriteRenderer renderer = indicatorGO.GetComponent<SpriteRenderer>();
+            //renderer.sprite = PlaceholderSprite.SharedSquare();
+            //renderer.color = new Color(1f, 0.9f, 0.3f);
+            //renderer.sortingOrder = 6;
 
-            aimIndicator = indicatorGO.transform;
-            aimIndicatorRenderer = renderer;
+            //aimIndicator = indicatorGO.transform;
+            //aimIndicatorRenderer = renderer;
         }
 
         private void Start()

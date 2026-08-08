@@ -32,7 +32,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("exploration_room_from_maintenance", fromMaintenanceSpawn);
 
             CreateCamera(fromStartSpawn);
-            CreatePlayer(fromStartSpawn, characters.player);
+            CreatePlayer(fromStartSpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Exploration Room");

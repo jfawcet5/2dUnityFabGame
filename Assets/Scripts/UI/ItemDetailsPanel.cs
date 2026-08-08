@@ -38,6 +38,7 @@ namespace BeyProject.UI
             {
                 iconImage.sprite = definition.icon;
                 iconImage.enabled = definition.icon != null;
+                iconImage.preserveAspect = true;
             }
 
             if (nameText != null)

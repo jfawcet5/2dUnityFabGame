@@ -34,7 +34,7 @@ namespace BeyProject.EditorTools
             CreateSpawnPoint("maintenance_bay_entry", entrySpawn);
 
             CreateCamera(entrySpawn);
-            CreatePlayer(entrySpawn, characters.player);
+            CreatePlayer(entrySpawn, characters.player, characters.playerAnimation);
             CreatePersistentSystemsLoaderObject();
             CreateRoomAmbience();
             CreateRoomIntro("Maintenance Bay");
