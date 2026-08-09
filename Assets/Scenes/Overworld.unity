@@ -170,8 +170,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
+  sprintSpeed: 6.5
   spriteRenderer: {fileID: 0}
   fallbackColor: {r: 0.2, g: 0.5, b: 0.95, a: 1}
+  footstepDistancePerStep: 0.5
 --- !u!212 &243180373
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -332,6 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625c6b50f639c4ee39290fb2c751ee10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupId: 
   item: {fileID: 11400000, guid: 93fc1dddad70a4f08955f3f6490d95e7, type: 2}
   quantity: 1
   spriteRenderer: {fileID: 340443520}

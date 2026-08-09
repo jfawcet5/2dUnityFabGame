@@ -25,6 +25,7 @@ ServerData/
 .vscode/
 .idea/
 .vs/
+.vsconfig
 
 *.csproj
 *.sln
