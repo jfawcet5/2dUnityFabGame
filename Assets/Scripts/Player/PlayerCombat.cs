@@ -116,6 +116,11 @@ namespace BeyProject.Player
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                BeginReload();
+            }
+
             Vector2 aimDirection = ComputeAimDirection();
             UpdateAimIndicator(aimDirection);
 
