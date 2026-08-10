@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using BeyProject.Core;
 using BeyProject.Overworld;
 using BeyProject.UI;
@@ -8,6 +9,7 @@ namespace BeyProject.Combat
 {
     public enum CombatObjectiveType
     {
+        None,
         DefeatAllEnemies,
         DestroyShieldGeneratorsThenEnemies,
         ActivateAllSwitches,
@@ -30,7 +32,7 @@ namespace BeyProject.Combat
     {
         [SerializeField] private Door targetDoor;
         [SerializeField] private string clearedFlag = "combat_room_cleared";
-        [SerializeField] private CombatObjectiveType objective = CombatObjectiveType.DefeatAllEnemies;
+        [SerializeField] private List<CombatObjectiveType> objectives = new List<CombatObjectiveType> { CombatObjectiveType.DefeatAllEnemies };
         [SerializeField] private string objectiveAnnouncement = "";
 
         [SerializeField]  private int remainingEnemies;
@@ -60,12 +62,22 @@ namespace BeyProject.Combat
 
             foreach (ShieldGenerator generator in FindObjectsOfType<ShieldGenerator>())
             {
+                if (generator.GetIsDestroyed())
+                {
+                    continue;
+                }
+                
                 remainingGenerators++;
                 generator.Destroyed += HandleGeneratorDestroyed;
             }
 
             foreach (Turret turret in FindObjectsOfType<Turret>())
             {
+                if (turret.GetIsDestroyed())
+                {
+                    continue;
+                }
+
                 remainingTurrets++;
                 turret.Destroyed += HandleTurretDestroyed;
             }
@@ -81,13 +93,13 @@ namespace BeyProject.Combat
                 combatSwitch.Activated += HandleSwitchActivated;
             }
 
-            if (!string.IsNullOrEmpty(objectiveAnnouncement) && !IsObjectiveComplete())
+            EvaluateObjective();
+            RefreshObjectiveText();
+
+            if (!string.IsNullOrEmpty(objectiveAnnouncement) && !cleared)
             {
                 StartCoroutine(AnnounceObjectiveAfterRoomTitle());
             }
-
-            RefreshObjectiveText();
-            EvaluateObjective();
         }
 
         /// <summary>
@@ -138,7 +150,7 @@ namespace BeyProject.Combat
             EvaluateObjective();
         }
 
-        private bool IsObjectiveComplete()
+        private bool IsObjectiveComplete(CombatObjectiveType objective)
         {
             switch (objective)
             {
@@ -161,7 +173,17 @@ namespace BeyProject.Combat
                 return;
             }
 
-            switch (objective)
+            CombatObjectiveType current = CombatObjectiveType.None;
+
+            foreach (CombatObjectiveType objective in objectives)
+            {
+                if (!IsObjectiveComplete(objective))
+                {
+                    current = objective;
+                }
+            }
+
+            switch (current)
             {
                 case CombatObjectiveType.DestroyShieldGeneratorsThenEnemies:
                     CurrentObjectiveText = remainingGenerators > 0
@@ -182,7 +204,17 @@ namespace BeyProject.Combat
 
         private void EvaluateObjective()
         {
-            if (cleared || !IsObjectiveComplete())
+            int completeCount = 0;
+
+            foreach (CombatObjectiveType objective in objectives)
+            {
+                if (IsObjectiveComplete(objective))
+                {
+                    completeCount++;
+                }
+            }
+
+            if (completeCount < objectives.Count)
             {
                 return;
             }

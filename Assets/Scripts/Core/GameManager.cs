@@ -1,5 +1,6 @@
 using System.Collections;
 using BeyProject.Overworld;
+using BeyProject.Player;
 using BeyProject.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,17 @@ namespace BeyProject.Core
 
         public bool IsInPostBattleGrace => Time.time - LastReturnedToOverworldAt < PostBattleGraceSeconds;
 
+        // Every room-to-room LoadScene destroys the current Player instance and the new scene
+        // instantiates a completely fresh one - PlayerHealth/PlayerCombat reset to full in
+        // their own Awake/Start with no idea a previous instance existed. Caching the outgoing
+        // instance's resource state here (a persistent singleton, so it survives the load) and
+        // pushing it into the new instance is what makes health/energy actually carry over,
+        // instead of just position.
+        private bool hasCachedPlayerCombatState;
+        private float cachedHealth;
+        private float cachedEnergy;
+        private int cachedBurst;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -53,12 +65,15 @@ namespace BeyProject.Core
 
         private IEnumerator TravelToRoomRoutine(string sceneName, string spawnPointId, Vector2 fallbackPosition)
         {
+            CachePlayerCombatState();
+
             if (SceneFadeUI.Instance != null)
             {
                 yield return SceneFadeUI.Instance.FadeOut();
             }
 
             bool loaded = false;
+            GameObject loadedPlayer = null;
 
             void OnRoomLoaded(Scene scene, LoadSceneMode mode)
             {
@@ -83,6 +98,7 @@ namespace BeyProject.Core
                 if (player != null)
                 {
                     player.transform.position = spawnPosition;
+                    loadedPlayer = player;
                 }
 
                 loaded = true;
@@ -92,6 +108,12 @@ namespace BeyProject.Core
             SceneManager.LoadScene(sceneName);
 
             yield return new WaitUntil(() => loaded);
+
+            // One more frame so the new Player's own Start() (which sets fresh full
+            // resources) has definitely already run before we override it - otherwise this
+            // and Start() would race depending on exactly when Unity schedules Start().
+            yield return null;
+            RestorePlayerCombatState(loadedPlayer);
 
             if (SceneFadeUI.Instance != null)
             {
@@ -119,12 +141,15 @@ namespace BeyProject.Core
 
         private IEnumerator ReturnFromBattleRoutine(BattleContext context)
         {
+            CachePlayerCombatState();
+
             if (SceneFadeUI.Instance != null)
             {
                 yield return SceneFadeUI.Instance.FadeOut();
             }
 
             bool loaded = false;
+            GameObject loadedPlayer = null;
 
             void OnReturnSceneLoaded(Scene scene, LoadSceneMode mode)
             {
@@ -136,6 +161,7 @@ namespace BeyProject.Core
                 if (player != null)
                 {
                     player.transform.position = context.returnPosition;
+                    loadedPlayer = player;
                 }
 
                 LastReturnedToOverworldAt = Time.time;
@@ -148,10 +174,46 @@ namespace BeyProject.Core
 
             yield return new WaitUntil(() => loaded);
 
+            yield return null;
+            RestorePlayerCombatState(loadedPlayer);
+
             if (SceneFadeUI.Instance != null)
             {
                 yield return SceneFadeUI.Instance.FadeIn();
             }
+        }
+
+        /// <summary>Snapshots the outgoing Player's health/energy/burst, if one exists, before
+        /// its scene unloads and destroys it.</summary>
+        private void CachePlayerCombatState()
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            PlayerHealth health = player != null ? player.GetComponent<PlayerHealth>() : null;
+            PlayerCombat combat = player != null ? player.GetComponent<PlayerCombat>() : null;
+
+            if (health == null && combat == null)
+            {
+                hasCachedPlayerCombatState = false;
+                return;
+            }
+
+            cachedHealth = health != null ? health.CurrentHealth : 0f;
+            cachedEnergy = combat != null ? combat.CurrentEnergy : 0f;
+            cachedBurst = combat != null ? combat.CurrentBurst : 0;
+            hasCachedPlayerCombatState = true;
+        }
+
+        /// <summary>Pushes the snapshot from CachePlayerCombatState into the newly-loaded
+        /// scene's Player instance, overriding the fresh-full values its own Start() set.</summary>
+        private void RestorePlayerCombatState(GameObject player)
+        {
+            if (!hasCachedPlayerCombatState || player == null)
+            {
+                return;
+            }
+
+            player.GetComponent<PlayerHealth>()?.RestoreHealth(cachedHealth);
+            player.GetComponent<PlayerCombat>()?.RestoreCombatState(cachedEnergy, cachedBurst);
         }
     }
 }

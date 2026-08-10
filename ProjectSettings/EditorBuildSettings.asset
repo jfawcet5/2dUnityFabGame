@@ -9,39 +9,57 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: f3ad5bad69bc24784b1aa8b68ccc3963
   - enabled: 1
-    path: Assets/Scenes/StartRoom.unity
+    path: Assets/Scenes/POC/StartRoom.unity
     guid: f86f4f618281040a0bcbc0e2dabc9bf0
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
+    path: Assets/Scenes/POC/Lobby.unity
     guid: 55868fe9a2c60446d8be4ef21b663016
   - enabled: 1
-    path: Assets/Scenes/Lithography.unity
+    path: Assets/Scenes/POC/Lithography.unity
     guid: 6edc70636fecf45f386f70252a4d7b9a
   - enabled: 1
-    path: Assets/Scenes/BreakRoom.unity
+    path: Assets/Scenes/POC/BreakRoom.unity
     guid: 31486faa387254a7098bdf08c0e2b1a6
   - enabled: 1
-    path: Assets/Scenes/CleanroomHallway.unity
+    path: Assets/Scenes/Demo/BossScene01.unity
+    guid: 16e7091714fac40d8bc85ad6bf9cb922
+  - enabled: 1
+    path: Assets/Scenes/Demo/EquipmentMaintenanceScene01.unity
+    guid: 978c13c31b98e433593db567b14778f8
+  - enabled: 1
+    path: Assets/Scenes/Demo/CleanroomScene01.unity
+    guid: 1c53dd67693744018be56a381c4a989e
+  - enabled: 1
+    path: Assets/Scenes/Demo/MainHallwayScene.unity
+    guid: dc6235712e523464db86319341d07f74
+  - enabled: 1
+    path: Assets/Scenes/Demo/MainLobbyScene.unity
+    guid: 36ba03e5b246c4b8087e2c1820866d90
+  - enabled: 1
+    path: Assets/Scenes/Demo/SupplyClosetScene01.unity
+    guid: 4d0e61a2199704da4a36bbec04f4c333
+  - enabled: 1
+    path: Assets/Scenes/POC/CleanroomHallway.unity
     guid: 7d17ec571089741f38d8247cf990d3fd
   - enabled: 1
-    path: Assets/Scenes/Storage.unity
+    path: Assets/Scenes/POC/Storage.unity
     guid: 78744ea51fa3247d78dd97b90d092f47
   - enabled: 1
-    path: Assets/Scenes/ExplorationRoom.unity
+    path: Assets/Scenes/POC/ExplorationRoom.unity
     guid: b0d6229f3d0914eb1a7810107827c7de
   - enabled: 1
-    path: Assets/Scenes/MaintenanceBay.unity
+    path: Assets/Scenes/POC/MaintenanceBay.unity
     guid: 97dbc2d24d2134fcc96a851cbff2bdb9
   - enabled: 1
-    path: Assets/Scenes/FabricationRoom.unity
+    path: Assets/Scenes/POC/FabricationRoom.unity
     guid: 891c7fbbf95274195952a3c5e052ae03
   - enabled: 1
-    path: Assets/Scenes/CombatRoom.unity
+    path: Assets/Scenes/POC/CombatRoom.unity
     guid: d57d84ab835b545fba4332b8698881c9
   - enabled: 1
-    path: Assets/Scenes/BossRoom.unity
+    path: Assets/Scenes/POC/BossRoom.unity
     guid: 2d75eb4ebe0a74a26a719bd9f456804d
   - enabled: 1
-    path: Assets/Scenes/Battle.unity
+    path: Assets/Scenes/POC/Battle.unity
     guid: 654d99fe21cdb4f5883d0db1177bc661
   m_configObjects: {}

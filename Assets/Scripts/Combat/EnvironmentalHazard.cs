@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BeyProject.Core;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace BeyProject.Combat
 {
@@ -34,6 +35,7 @@ namespace BeyProject.Combat
         [SerializeField] private float activePhaseSeconds = 1.4f;
         [SerializeField] private float rotationDegreesPerSecond = 45f;
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private Tilemap tileRenderer;
         [SerializeField] private Color activeColor = new Color(0.5f, 0.85f, 1f, 0.85f);
         [SerializeField] private Color idleColor = new Color(0.5f, 0.85f, 1f, 0.18f);
 
@@ -71,6 +73,11 @@ namespace BeyProject.Combat
             {
                 spriteRenderer.sprite = PlaceholderSprite.SharedSquare();
             }
+
+            if (tileRenderer == null)
+            {
+                tileRenderer = GetComponent<Tilemap>();
+            }
         }
 
         private void Update()
@@ -91,6 +98,16 @@ namespace BeyProject.Combat
                     target.a *= 0.75f + 0.25f * Mathf.Sin(Time.time * 4f);
                 }
                 spriteRenderer.color = target;
+            }
+
+            if (tileRenderer != null)
+            {
+                Color target = active ? activeColor : idleColor;
+                if (!active)
+                {
+                    target.a *= 0.75f + 0.25f * Mathf.Sin(Time.time * 4f);
+                }
+                tileRenderer.color = target;
             }
 
             if (!active || Time.time < nextTickTime)

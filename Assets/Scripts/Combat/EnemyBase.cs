@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using BeyProject.Core;
 using BeyProject.Player;
 using UnityEngine;
@@ -9,22 +10,33 @@ namespace BeyProject.Combat
     {
         Basic,
         Defensive,
-        Fast
+        Fast,
+
+        // Appended rather than inserted - ThermalLeech/Capacitor/Overclocker are read from
+        // already-serialized scene data the moment they're placed, and reordering would
+        // reclassify any existing enemyType values already saved in a scene.
+        ThermalLeech,
+        Capacitor,
+        Overclocker
     }
 
     /// <summary>
     /// One component, branching on enemyType - same "flat fields + enum" convention already
-    /// used by WorldAction, rather than a subclass per enemy type. The three archetypes are
-    /// kept (Phase 4 says improve them, not replace them) but each now has a distinct
-    /// decision loop instead of three speeds of "walk at the player":
+    /// used by WorldAction, rather than a subclass per enemy type. The three original
+    /// archetypes (Basic/Defensive/Fast) are untouched; three more reuse the same movement/
+    /// damage plumbing to create different problems instead of just more HP:
     ///
-    ///   Basic     - closes to a mid range and lobs slow aimed bolts. The baseline threat;
-    ///               punishes standing still, ignorable if you keep moving.
-    ///   Defensive - holds a preferred stand-off range, backing away if crowded, and cycles a
-    ///               telegraphed shield that halves incoming damage. Rewards burst damage
-    ///               timed to the gap, punishes steady chip damage.
-    ///   Fast      - strafes in a circle, then telegraphs and dashes through the player.
-    ///               Rewards tracking and repositioning, punishes tunnel vision.
+    ///   ThermalLeech - reuses Basic's chase-and-hold, tuned (via a small preferredRange on
+    ///                  the placed instance) to want full contact. Its actual attack is an
+    ///                  energy drain on touch rather than a ranged bolt - pressures
+    ///                  energy-hungry chip builds specifically.
+    ///   Capacitor    - stationary. Takes damage normally, but every few hits it telegraphs
+    ///                  and then discharges a radial burst before resetting - punishes rapid,
+    ///                  low-damage spam (Scatter/Burst) more than sparse heavy hits
+    ///                  (Focusing Algorithm/Charge).
+    ///   Overclocker  - reuses Basic's movement, never attacks directly, and periodically
+    ///                  pulses a buff aura that speeds up nearby enemies - a "kill this one
+    ///                  first" priority target rather than a damage threat itself.
     ///
     /// Defeat persists via the same SaveSystem-flag/self-destroy-in-Awake idiom
     /// ItemPickup/Door already use.
@@ -35,6 +47,7 @@ namespace BeyProject.Combat
         private const float ShieldActiveSeconds = 1.3f;
         private const float ContactDamageIntervalSeconds = 0.75f;
         private const float KnockbackDamping = 9f;
+        private const float DischargeWarningSeconds = 0.4f;
 
         [SerializeField] private string enemyId;
         [SerializeField] private EnemyType enemyType = EnemyType.Basic;
@@ -44,7 +57,7 @@ namespace BeyProject.Combat
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private HitFlash hitFlash;
 
-        [Header("Ranged attack (Basic / Defensive)")]
+        [Header("Ranged attack (Basic / Defensive) - also reused by Capacitor's discharge")]
         [SerializeField] private bool canShoot = true;
         [SerializeField] private float preferredRange = 4.5f;
         [SerializeField] private float attackIntervalSeconds = 2.2f;
@@ -56,6 +69,20 @@ namespace BeyProject.Combat
         [SerializeField] private float dashTelegraphSeconds = 0.45f;
         [SerializeField] private float dashSeconds = 0.4f;
         [SerializeField] private float dashRecoverSeconds = 0.8f;
+
+        [Header("Thermal Leech")]
+        [SerializeField] private float energyDrainAmount = 18f;
+
+        [Header("Capacitor")]
+        [SerializeField] private int dischargeHitThreshold = 4;
+        [SerializeField] private int dischargeProjectileCount = 8;
+
+        [Header("Overclocker")]
+        [SerializeField] private float buffRadius = 4f;
+        [SerializeField] private float buffPulseIntervalSeconds = 3f;
+        [SerializeField] private float buffDurationSeconds = 2.5f;
+        [SerializeField] private float buffSpeedMultiplier = 1.5f;
+        [SerializeField] private float buffAttackRateMultiplier = 1.6f;
 
         public event Action Defeated;
 
@@ -78,6 +105,14 @@ namespace BeyProject.Combat
         private Vector2 dashDirection;
         private float strafeSign = 1f;
 
+        private int hitsSinceDischarge;
+        private bool isDischarging;
+
+        private float nextBuffPulseTime;
+        private float speedBuffMultiplier = 1f;
+        private float attackRateBuffMultiplier = 1f;
+        private float buffExpiresAt = float.NegativeInfinity;
+
         public float HealthFraction => maxHealth > 0f ? Mathf.Clamp01(currentHealth / maxHealth) : 0f;
 
         private void Awake()
@@ -91,6 +126,7 @@ namespace BeyProject.Combat
             currentHealth = maxHealth;
             strafeSign = UnityEngine.Random.value < 0.5f ? -1f : 1f;
             nextAttackTime = Time.time + UnityEngine.Random.Range(0.4f, attackIntervalSeconds);
+            nextBuffPulseTime = Time.time + UnityEngine.Random.Range(0.5f, buffPulseIntervalSeconds);
 
             if (spriteRenderer != null)
             {
@@ -117,6 +153,7 @@ namespace BeyProject.Combat
         private void Update()
         {
             ApplyKnockbackDecay();
+            ApplyBuffDecay();
 
             if (player == null)
             {
@@ -140,9 +177,20 @@ namespace BeyProject.Combat
                 case EnemyType.Defensive:
                     TickDefensive(direction, distance);
                     break;
+                case EnemyType.Capacitor:
+                    // Stationary - all of its behavior lives in TakeDamage.
+                    break;
                 default:
+                    // Basic, ThermalLeech, Overclocker all chase-and-hold the same way;
+                    // ThermalLeech wants a much shorter preferredRange (full contact) and
+                    // Overclocker/ThermalLeech both have canShoot off, tuned per placed instance.
                     TickBasic(direction, distance);
                     break;
+            }
+
+            if (enemyType == EnemyType.Overclocker)
+            {
+                TickOverclockerAura();
             }
 
             UpdateTint();
@@ -249,6 +297,49 @@ namespace BeyProject.Combat
             }
         }
 
+        /// <summary>Periodically buffs every other EnemyBase within buffRadius.</summary>
+        private void TickOverclockerAura()
+        {
+            if (Time.time < nextBuffPulseTime)
+            {
+                return;
+            }
+
+            nextBuffPulseTime = Time.time + buffPulseIntervalSeconds;
+            CombatFeedback.Telegraph(transform.position, new Color(1f, 0.5f, 0.9f), buffRadius * 0.5f);
+
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, buffRadius);
+            foreach (Collider2D hit in hits)
+            {
+                EnemyBase other = hit.GetComponent<EnemyBase>();
+                if (other != null && other != this)
+                {
+                    other.ApplyBuff(buffSpeedMultiplier, buffAttackRateMultiplier, buffDurationSeconds);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Applied by an Overclocker's aura pulse. Taking the max of current/incoming keeps a
+        /// fresh weaker pulse from cutting a stronger one short; extending expiry refreshes
+        /// uptime rather than compounding the multiplier under overlapping auras.
+        /// </summary>
+        public void ApplyBuff(float speedMultiplier, float attackRateMultiplier, float duration)
+        {
+            speedBuffMultiplier = Mathf.Max(speedBuffMultiplier, speedMultiplier);
+            attackRateBuffMultiplier = Mathf.Max(attackRateBuffMultiplier, attackRateMultiplier);
+            buffExpiresAt = Mathf.Max(buffExpiresAt, Time.time + duration);
+        }
+
+        private void ApplyBuffDecay()
+        {
+            if (Time.time > buffExpiresAt)
+            {
+                speedBuffMultiplier = 1f;
+                attackRateBuffMultiplier = 1f;
+            }
+        }
+
         private void TryShoot(Vector2 direction, float distance)
         {
             if (!canShoot || Time.time < nextAttackTime || distance > preferredRange + 3f)
@@ -256,7 +347,7 @@ namespace BeyProject.Combat
                 return;
             }
 
-            nextAttackTime = Time.time + attackIntervalSeconds;
+            nextAttackTime = Time.time + attackIntervalSeconds / Mathf.Max(0.05f, attackRateBuffMultiplier);
 
             Vector3 spawn = transform.position + (Vector3)(direction * 0.5f);
             CombatFeedback.MuzzleFlash(spawn, direction, new Color(1f, 0.6f, 0.4f), 0.8f);
@@ -266,7 +357,7 @@ namespace BeyProject.Combat
 
         private void Move(Vector2 direction, float speed)
         {
-            transform.position += (Vector3)(direction * speed * Time.deltaTime);
+            transform.position += (Vector3)(direction * speed * speedBuffMultiplier * Time.deltaTime);
         }
 
         private void ApplyKnockbackDecay()
@@ -302,6 +393,12 @@ namespace BeyProject.Combat
                 // Shield-generator protection reads as a dull, drained tint - visibly
                 // different from the Defensive enemy's own bright shield window.
                 tint = Color.Lerp(baseColor, new Color(0.35f, 0.4f, 0.45f), 0.6f);
+            }
+            else if (Time.time < buffExpiresAt)
+            {
+                // Overclocker's buff reads as a warm magenta glow - distinct from every other
+                // tint state so "this one is empowered" is legible at a glance.
+                tint = Color.Lerp(baseColor, new Color(1f, 0.5f, 0.9f), 0.5f);
             }
 
             hitFlash.SetBaseColor(tint);
@@ -339,6 +436,11 @@ namespace BeyProject.Combat
                 knockbackVelocity += away.normalized * Mathf.Clamp(actual * 0.35f, 1f, 7f);
             }
 
+            if (enemyType == EnemyType.Capacitor && currentHealth > 0f)
+            {
+                RegisterCapacitorHit();
+            }
+
             if (currentHealth <= 0f)
             {
                 SaveSystem.Instance?.SetFlag($"enemy_defeated_{enemyId}");
@@ -346,6 +448,46 @@ namespace BeyProject.Combat
                 Defeated?.Invoke();
                 Destroy(gameObject);
             }
+        }
+
+        /// <summary>
+        /// Every dischargeHitThreshold hits, telegraphs and then discharges a radial burst -
+        /// on top of, not instead of, normal health loss. Punishes rapid low-damage spam
+        /// (more hits landed = more discharges) more than sparse heavy hits.
+        /// </summary>
+        private void RegisterCapacitorHit()
+        {
+            hitsSinceDischarge++;
+
+            if (hitsSinceDischarge >= dischargeHitThreshold && !isDischarging)
+            {
+                hitsSinceDischarge = 0;
+                StartCoroutine(DischargeAfterDelay());
+            }
+        }
+
+        private IEnumerator DischargeAfterDelay()
+        {
+            isDischarging = true;
+            CombatFeedback.Telegraph(transform.position, new Color(1f, 0.8f, 0.3f), 2f);
+
+            yield return new WaitForSeconds(DischargeWarningSeconds);
+
+            // A killing blow landed during the warning window - nothing left to discharge from.
+            if (currentHealth > 0f)
+            {
+                CombatFeedback.Explosion(transform.position, 1.5f, baseColor);
+
+                for (int i = 0; i < dischargeProjectileCount; i++)
+                {
+                    float angle = (360f / dischargeProjectileCount) * i;
+                    Vector2 dir = Quaternion.Euler(0f, 0f, angle) * Vector2.up;
+                    Projectile.Spawn(transform.position, dir, projectileSpeed, projectileDamage,
+                        isPlayerOwned: false, homing: false, sizeMultiplier: 0.9f, color: new Color(1f, 0.8f, 0.3f));
+                }
+            }
+
+            isDischarging = false;
         }
 
         private void OnTriggerStay2D(Collider2D other)
@@ -360,12 +502,23 @@ namespace BeyProject.Combat
             {
                 lastContactDamageTime = Time.time;
                 playerHealth.TakeDamage(contactDamage, transform.position);
+
+                if (enemyType == EnemyType.ThermalLeech)
+                {
+                    var playerCombat = other.GetComponent<PlayerCombat>();
+                    playerCombat?.DrainEnergy(energyDrainAmount);
+                }
             }
         }
 
         public bool GetIsDefeated()
         {
             return SaveSystem.Instance != null && SaveSystem.Instance.HasFlag($"enemy_defeated_{enemyId}");
+        }
+
+        public void TakeDamage(float amount, bool bypassInvulnerability = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

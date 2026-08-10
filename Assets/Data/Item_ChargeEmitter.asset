@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 453374cc3ec8b4dafa56886fb7371005, type: 3}
+  m_Name: Item_ChargeEmitter
+  m_EditorClassIdentifier:
+  id: charge_emitter_01
+  displayName: Charge Emitter
+  color: {r: 0.6, g: 0.35, b: 0.95, a: 1}
+  description: Builds a single high-density bolt over time. Rewards patience over
+    reflexes.
+  category: 5
+  isKeyItem: 0
+  icon: {fileID: 21300000, guid: 2d50caf4c19114b46b4d70708e838d6f, type: 3}
+  chipSlot: 2
+  processorBehavior: 6
+  batteryBonus: 0
+  cacheBonus: 0
+  coolingCostMultiplier: 1
+  coolingRegenMultiplier: 1
+  damageMultiplier: 1
+  projectileSizeMultiplier: 1
+  moveSpeedMultiplier: 1
+  reloadSpeedMultiplier: 1
+  fireRateMultiplier: 1
+  projectileSpeedMultiplier: 1
+  projectileCount: 1
+  homing: 0
+  chipOutputDescription: Charged Energy Lance
+  chipTradeoffDescription: No continuous fire - hold to charge, release for a shot
+    that hits far harder the longer you hold.

@@ -11,7 +11,7 @@ namespace BeyProject.Overworld
     {
         ShowDialogue,
         GiveItem,
-        TriggerBattlePlaceholder,
+        LaunchInterface,
         UnlockDoor,
         SetFlag
     }
@@ -28,8 +28,8 @@ namespace BeyProject.Overworld
         public ItemDefinition item;
         public int itemQuantity = 1;
 
-        [Header("TriggerBattlePlaceholder")]
-        public BeyIdentity battleOpponent;
+        [Header("LaunchInteface")]
+        public GameObject interfaceInteractable;
 
         [Header("UnlockDoor")]
         public Door doorToUnlock;
@@ -77,6 +77,7 @@ namespace BeyProject.Overworld
                     if (action.item != null && Inventory.Instance != null)
                     {
                         Inventory.Instance.AddItem(action.item, action.itemQuantity);
+                        DialogueUI.Instance?.Show("", new string[] { $"Obtained: {action.item.displayName} x{action.itemQuantity}" }, null);
                     }
                     break;
 
@@ -94,32 +95,18 @@ namespace BeyProject.Overworld
                     }
                     break;
 
-                case InteractionActionType.TriggerBattlePlaceholder:
-                    RunBattlePlaceholder(action, interactor);
+                case InteractionActionType.LaunchInterface:
+                    IInterfaceLauncher launcher = action.interfaceInteractable.GetComponent<IInterfaceLauncher>();
+                    if (launcher!= null)
+                    {
+                        launcher.OpenInterface();
+                    }
                     break;
 
                 case InteractionActionType.ShowDialogue:
                     // No dialogue asset assigned or no DialogueUI available - nothing to show.
                     break;
             }
-        }
-
-        private static void RunBattlePlaceholder(WorldAction action, GameObject interactor)
-        {
-            if (GameManager.Instance == null)
-            {
-                return;
-            }
-
-            BeyIdentity identity = action.battleOpponent;
-            var context = new BattleContext(
-                identity != null ? identity.id : "unknown_bey",
-                identity != null ? identity.displayName : "Unknown Bey",
-                identity != null ? identity.color : Color.red,
-                SceneManager.GetActiveScene().name,
-                interactor != null ? interactor.transform.position : Vector2.zero);
-
-            GameManager.Instance.StartBattle(context);
         }
     }
 }

@@ -32,6 +32,11 @@ namespace BeyProject.Combat
         private bool counted;
         private Color baseColor;
 
+        public bool GetIsDestroyed()
+        {
+            return !string.IsNullOrEmpty(generatorId) && SaveSystem.Instance != null && SaveSystem.Instance.HasFlag(DestroyedFlag);
+        }
+
         private void Awake()
         {
             if (!string.IsNullOrEmpty(generatorId) &&
@@ -112,6 +117,11 @@ namespace BeyProject.Combat
                 Destroyed?.Invoke();
                 Destroy(gameObject);
             }
+        }
+
+        public void TakeDamage(float amount, bool bypassInvulnerability = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

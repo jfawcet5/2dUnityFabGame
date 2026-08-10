@@ -100,5 +100,10 @@ namespace BeyProject.Combat
                 Destroy(gameObject);
             }
         }
+
+        public void TakeDamage(float amount, bool bypassInvulnerability = false)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

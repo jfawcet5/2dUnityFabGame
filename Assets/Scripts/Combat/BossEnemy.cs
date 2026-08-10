@@ -332,5 +332,10 @@ namespace BeyProject.Combat
                 }
             }
         }
+
+        public void TakeDamage(float amount, bool bypassInvulnerability = false)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace BeyProject.Overworld
     /// OverworldOpponent) rather than routed through WorldActionExecutor, since "open a
     /// custom panel" isn't one of the existing InteractionActionType cases.
     /// </summary>
-    public class FabricationStation : MonoBehaviour, IInteractable
+    public class FabricationStation : MonoBehaviour, IInterfaceLauncher
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Color fallbackColor = new Color(0.6f, 0.5f, 0.7f);
@@ -28,6 +28,12 @@ namespace BeyProject.Overworld
         }
 
         public void Interact(GameObject interactor)
+        {
+            AudioManager.Instance?.PlayUIClick();
+            FabricationUI.Instance?.Show();
+        }
+
+        public void OpenInterface()
         {
             AudioManager.Instance?.PlayUIClick();
             FabricationUI.Instance?.Show();

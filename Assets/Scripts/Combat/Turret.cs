@@ -81,6 +81,11 @@ namespace BeyProject.Combat
 
         private string DestroyedFlag => $"turret_destroyed_{turretId}";
 
+        public bool GetIsDestroyed()
+        {
+            return !string.IsNullOrEmpty(turretId) && SaveSystem.Instance != null && SaveSystem.Instance.HasFlag(DestroyedFlag);
+        }
+
         private void Start()
         {
             GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
@@ -155,6 +160,11 @@ namespace BeyProject.Combat
                 Destroyed?.Invoke();
                 Destroy(gameObject);
             }
+        }
+
+        public void TakeDamage(float amount, bool bypassInvulnerability = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

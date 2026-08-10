@@ -12,5 +12,6 @@ namespace BeyProject.Combat
     {
         void TakeDamage(float amount);
         void TakeDamage(float amount, Vector2 hitFromPosition);
+        void TakeDamage(float amount, bool bypassInvulnerability = false);
     }
 }

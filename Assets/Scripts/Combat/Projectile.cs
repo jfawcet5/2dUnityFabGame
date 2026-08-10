@@ -158,6 +158,11 @@ namespace BeyProject.Combat
                 return true;
             }
 
+            if (damageable is CoverObject)
+            {
+                return true;
+            }
+
             bool targetIsPlayer = damageable is PlayerHealth;
             return isPlayerOwned != targetIsPlayer;
         }

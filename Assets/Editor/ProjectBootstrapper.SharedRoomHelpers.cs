@@ -261,7 +261,7 @@ namespace BeyProject.EditorTools
                 element.FindPropertyRelative("dialogue").objectReferenceValue = action.dialogue;
                 element.FindPropertyRelative("item").objectReferenceValue = action.item;
                 element.FindPropertyRelative("itemQuantity").intValue = action.itemQuantity;
-                element.FindPropertyRelative("battleOpponent").objectReferenceValue = action.battleOpponent;
+                //element.FindPropertyRelative("battleOpponent").objectReferenceValue = action.battleOpponent;
                 element.FindPropertyRelative("doorToUnlock").objectReferenceValue = action.doorToUnlock;
                 element.FindPropertyRelative("flagKey").stringValue = action.flagKey ?? "";
             }

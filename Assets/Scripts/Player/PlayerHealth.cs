@@ -114,6 +114,16 @@ namespace BeyProject.Player
             CurrentHealth = Mathf.Min(maxHealth, CurrentHealth + amount);
         }
 
+        /// <summary>
+        /// Sets health directly to a specific value with none of TakeDamage's side effects
+        /// (invulnerability window, knockback, hit feedback) - for carrying the previous
+        /// room's health into a freshly-loaded scene's Player instance, not for combat.
+        /// </summary>
+        public void RestoreHealth(float value)
+        {
+            CurrentHealth = Mathf.Clamp(value, 0f, maxHealth);
+        }
+
         private void ApplyKnockback(Vector2 hitFromPosition)
         {
             Vector2 away = (Vector2)transform.position - hitFromPosition;
@@ -146,7 +156,29 @@ namespace BeyProject.Player
             CurrentHealth = maxHealth;
             isDying = false;
             invulnerableUntil = Time.time + InvulnerabilitySeconds;
-            GameManager.Instance?.TravelToRoom("StartRoom", "start_room_entry", transform.position);
+            GameManager.Instance?.TravelToRoom("MainLobbyScene", "main_lobby_start", transform.position);
+        }
+
+        public void TakeDamage(float amount, bool bypassInvulnerability = false)
+        {
+            if (isDying)
+            {
+                return;
+            }
+
+            CurrentHealth -= amount;
+            RecentDamagePulse = 1f;
+
+            hitFlash?.Flash(0.14f);
+            CombatFeedback.Impact(transform.position, new Color(1f, 0.4f, 0.4f));
+            CameraFollow2D.RequestShake(0.18f, 0.12f);
+
+            ApplyKnockback(transform.position);
+
+            if (CurrentHealth <= 0f)
+            {
+                Die();
+            }
         }
     }
 }

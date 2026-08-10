@@ -2455,7 +2455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.85}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5677,11 +5677,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3619548730244445601, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4732510094954093529, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_Size
-      value: 0.99999994
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4771572624678921556, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_Pivot.x
@@ -5825,6 +5825,10 @@ PrefabInstance:
     - target: {fileID: 2863393872698254225, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4732510094954093529, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
+      propertyPath: m_Size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4771572624678921556, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_Pivot.x
@@ -5975,7 +5979,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4732510094954093529, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4771572624678921556, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_Pivot.x
@@ -6137,6 +6141,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3619548730244445601, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4732510094954093529, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4732510094954093529, guid: 369d1949d10114d21b452d9267e8210d, type: 3}
       propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
