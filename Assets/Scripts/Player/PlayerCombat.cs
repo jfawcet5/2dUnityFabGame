@@ -17,7 +17,7 @@ namespace BeyProject.Player
     /// Fire is hold-to-repeat rather than click-per-shot: with a chip-driven fire rate, a
     /// click-only weapon would make the rate stat unfeelable.
     ///
-    /// The equipped Processor's ItemDefinition.processorBehavior selects *how* fire input is
+    /// The equipped Processor's ItemDefinition.chipModule.processorBehavior selects *how* fire input is
     /// interpreted (Standard hold-to-repeat, Burst, Scatter, Charge) - ChipStats remains the
     /// single place combat numbers are computed, this only changes when/how often the shared
     /// spend-resources-and-spawn-projectiles path (SpawnShots/SpendShot) gets called.
@@ -53,7 +53,27 @@ namespace BeyProject.Player
         private const float ChargeMinCostMultiplier = 0.6f;
         private const float ChargeMaxCostMultiplier = 1.8f;
 
-        private static readonly Color BoltColor = new Color(0.3f, 0.85f, 1f);
+        //private static readonly Color BoltColor = new Color(0.3f, 0.85f, 1f);
+        public Color BoltColor = new Color(1f, 1f, 1f);
+
+        // Fallback look when no equipped module supplies its own ProjectileVisual asset - wraps
+        // the existing procedural placeholder animation so shots still render without requiring
+        // any real art. Built once and reused, same caching reason as PlaceholderSprite.Shared*.
+        private static ProjectileVisual defaultBoltVisual;
+
+        private static ProjectileVisual DefaultBoltVisual
+        {
+            get
+            {
+                if (defaultBoltVisual == null)
+                {
+                    defaultBoltVisual = ScriptableObject.CreateInstance<ProjectileVisual>();
+                    defaultBoltVisual.frames = PlaceholderSprite.SharedBoltFrames();
+                }
+
+                return defaultBoltVisual;
+            }
+        }
 
         [SerializeField] private SpriteRenderer aimIndicatorRenderer;
 
@@ -128,7 +148,7 @@ namespace BeyProject.Player
             currentEnergy = Mathf.Min(currentEnergy, lastStats.maxEnergy);
             currentBurst = Mathf.Min(currentBurst, lastStats.burstCapacity);
             currentBehavior = ChipManager.Instance != null
-                ? ChipManager.Instance.GetEquipped(ChipSlotType.Processor)?.processorBehavior ?? ProcessorBehaviorType.Standard
+                ? ChipManager.Instance.GetEquipped(ChipSlotType.Processor)?.chipModule.processorBehavior ?? ProcessorBehaviorType.Standard
                 : ProcessorBehaviorType.Standard;
 
             if (isReloading)
@@ -382,8 +402,10 @@ namespace BeyProject.Player
                     : startAngle + spreadStep * i;
 
                 Vector2 shotDirection = Quaternion.Euler(0f, 0f, angleOffset) * aimDirection;
+                ProjectileVisual visual = lastStats.projectileVisual != null ? lastStats.projectileVisual : DefaultBoltVisual;
                 Projectile.Spawn(spawnPosition, shotDirection, BaseProjectileSpeed * speedMultiplier, damage,
-                    isPlayerOwned: true, homing: homing, sizeMultiplier: sizeMultiplier, color: BoltColor);
+                    isPlayerOwned: true, homing: homing, sizeMultiplier: sizeMultiplier, color: BoltColor,
+                    visual: visual);
             }
         }
     }

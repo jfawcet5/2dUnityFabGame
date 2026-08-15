@@ -19,19 +19,20 @@ MonoBehaviour:
   category: 1
   isKeyItem: 0
   icon: {fileID: 21300000, guid: 8dcf28446675a4276b500f0f49c118bf, type: 3}
-  chipSlot: 0
-  processorBehavior: 0
-  batteryBonus: 0
-  cacheBonus: 0
-  coolingCostMultiplier: 1
-  coolingRegenMultiplier: 1
-  damageMultiplier: 1
-  projectileSizeMultiplier: 1
-  moveSpeedMultiplier: 1
-  reloadSpeedMultiplier: 1
-  fireRateMultiplier: 1
-  projectileSpeedMultiplier: 1
-  projectileCount: 1
-  homing: 0
-  chipOutputDescription: 
-  chipTradeoffDescription: 
+  chipModule:
+    chipSlot: 0
+    processorBehavior: 0
+    batteryBonus: 0
+    cacheBonus: 0
+    coolingCostMultiplier: 1
+    coolingRegenMultiplier: 1
+    damageMultiplier: 1
+    projectileSizeMultiplier: 1
+    moveSpeedMultiplier: 1
+    reloadSpeedMultiplier: 1
+    fireRateMultiplier: 1
+    projectileSpeedMultiplier: 1
+    projectileCount: 1
+    homing: 0
+    chipOutputDescription: 
+    chipTradeoffDescription: 

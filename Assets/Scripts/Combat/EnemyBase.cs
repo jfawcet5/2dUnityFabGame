@@ -41,6 +41,7 @@ namespace BeyProject.Combat
     /// Defeat persists via the same SaveSystem-flag/self-destroy-in-Awake idiom
     /// ItemPickup/Door already use.
     /// </summary>
+    [RequireComponent(typeof(Rigidbody2D))]
     public class EnemyBase : MonoBehaviour, IDamageable
     {
         private const float ShieldCycleSeconds = 3.4f;
@@ -48,6 +49,22 @@ namespace BeyProject.Combat
         private const float ContactDamageIntervalSeconds = 0.75f;
         private const float KnockbackDamping = 9f;
         private const float DischargeWarningSeconds = 0.4f;
+
+        // Whisker steering: probe straight ahead first (the common case, nothing in the way),
+        // then sweep these offsets outward from straight-ahead until one comes back clear. Lets
+        // an enemy slide along a wall or route around a corner/prop without a navmesh - distance
+        // is comfortably more than one physics step's travel even during a Fast enemy's dash.
+        private const float ObstacleProbeDistance = 0.9f;
+        private static readonly float[] SteeringAngleOffsets = { 0f, 35f, -35f, 70f, -70f, 105f, -105f, 140f, -140f };
+
+        // How long an enemy will keep trying to maneuver for a clear shot before settling for
+        // shooting through destructible cover instead - cover can have a lot of health, so
+        // grinding it down is a last resort, not the default, but an enemy that can never find
+        // an angle (e.g. boxed in by cover) still needs to eventually do something.
+        private const float CoverPatienceSeconds = 2.5f;
+
+        private static readonly ContactFilter2D BlockingContactFilter = new ContactFilter2D { useTriggers = false };
+        private static readonly RaycastHit2D[] ProbeHits = new RaycastHit2D[4];
 
         [SerializeField] private string enemyId;
         [SerializeField] private EnemyType enemyType = EnemyType.Basic;
@@ -86,6 +103,17 @@ namespace BeyProject.Combat
 
         public event Action Defeated;
 
+        /// <summary>Clear: nothing in the way, safe to shoot. BlockedByCover: a destructible
+        /// CoverObject is in the way - worth shooting only as a patience-timeout fallback, since
+        /// maneuvering for an angle is preferred (cover can have a lot of health). Blocked: a
+        /// wall or indestructible obstacle - never worth shooting.</summary>
+        private enum LineOfSight
+        {
+            Clear,
+            BlockedByCover,
+            Blocked
+        }
+
         private enum DashPhase
         {
             Strafe,
@@ -96,6 +124,9 @@ namespace BeyProject.Combat
 
         private float currentHealth;
         private Transform player;
+        private Rigidbody2D body;
+        private Collider2D selfCollider;
+        private Vector2 desiredVelocity;
         private float lastContactDamageTime = float.NegativeInfinity;
         private Color baseColor;
         private Vector2 knockbackVelocity;
@@ -107,6 +138,8 @@ namespace BeyProject.Combat
 
         private int hitsSinceDischarge;
         private bool isDischarging;
+
+        private float coverBlockedSince = -1f;
 
         private float nextBuffPulseTime;
         private float speedBuffMultiplier = 1f;
@@ -124,6 +157,11 @@ namespace BeyProject.Combat
             }
 
             currentHealth = maxHealth;
+            body = GetComponent<Rigidbody2D>();
+            body.gravityScale = 0f;
+            body.freezeRotation = true;
+            selfCollider = GetComponent<Collider2D>();
+
             strafeSign = UnityEngine.Random.value < 0.5f ? -1f : 1f;
             nextAttackTime = Time.time + UnityEngine.Random.Range(0.4f, attackIntervalSeconds);
             nextBuffPulseTime = Time.time + UnityEngine.Random.Range(0.5f, buffPulseIntervalSeconds);
@@ -152,6 +190,8 @@ namespace BeyProject.Combat
 
         private void Update()
         {
+            desiredVelocity = Vector2.zero;
+
             ApplyKnockbackDecay();
             ApplyBuffDecay();
 
@@ -199,6 +239,8 @@ namespace BeyProject.Combat
         /// <summary>Closes to roughly preferredRange, then holds and shoots.</summary>
         private void TickBasic(Vector2 direction, float distance)
         {
+            LineOfSight lineOfSight = GetLineOfSight(direction, distance);
+
             // A dead band around the preferred range keeps it from jittering in and out.
             if (distance > preferredRange + 0.5f)
             {
@@ -208,13 +250,22 @@ namespace BeyProject.Combat
             {
                 Move(-direction, moveSpeed * 0.6f);
             }
+            else if (lineOfSight != LineOfSight.Clear)
+            {
+                // In good range but can't see the player - reposition for an angle instead of
+                // standing still grinding down cover that might have a lot of health.
+                Vector2 perpendicular = new Vector2(-direction.y, direction.x) * strafeSign;
+                Move(perpendicular, moveSpeed * 0.6f);
+            }
 
-            TryShoot(direction, distance);
+            TryShoot(direction, distance, lineOfSight);
         }
 
         /// <summary>Holds a stand-off range and strafes there; shield cycles independently.</summary>
         private void TickDefensive(Vector2 direction, float distance)
         {
+            LineOfSight lineOfSight = GetLineOfSight(direction, distance);
+
             if (distance > preferredRange + 0.5f)
             {
                 Move(direction, moveSpeed);
@@ -233,7 +284,7 @@ namespace BeyProject.Combat
             // that alternation is what makes it read as a rhythm rather than a health sponge.
             if (!IsShielded)
             {
-                TryShoot(direction, distance);
+                TryShoot(direction, distance, lineOfSight);
             }
         }
 
@@ -340,11 +391,40 @@ namespace BeyProject.Combat
             }
         }
 
-        private void TryShoot(Vector2 direction, float distance)
+        private void TryShoot(Vector2 direction, float distance, LineOfSight lineOfSight)
         {
             if (!canShoot || Time.time < nextAttackTime || distance > preferredRange + 3f)
             {
                 return;
+            }
+
+            if (lineOfSight == LineOfSight.Blocked)
+            {
+                // A wall or indestructible obstacle - never worth shooting into. Not consumed,
+                // so the enemy fires immediately once it maneuvers into the clear instead of
+                // waiting out a wasted cooldown cycle.
+                coverBlockedSince = -1f;
+                return;
+            }
+
+            if (lineOfSight == LineOfSight.BlockedByCover)
+            {
+                if (coverBlockedSince < 0f)
+                {
+                    coverBlockedSince = Time.time;
+                }
+
+                // Prefer maneuvering for a clear shot over grinding down cover that might have a
+                // lot of health - only fall back to shooting through it once repositioning has
+                // had a real chance to find an angle and hasn't.
+                if (Time.time - coverBlockedSince < CoverPatienceSeconds)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                coverBlockedSince = -1f;
             }
 
             nextAttackTime = Time.time + attackIntervalSeconds / Mathf.Max(0.05f, attackRateBuffMultiplier);
@@ -355,19 +435,115 @@ namespace BeyProject.Combat
                 isPlayerOwned: false, homing: false, sizeMultiplier: 0.9f, color: new Color(1f, 0.55f, 0.35f));
         }
 
+        /// <summary>
+        /// Classifies the nearest solid (non-trigger) thing between here and the player - see
+        /// the LineOfSight enum for what each outcome means to TryShoot/TickBasic.
+        /// </summary>
+        private LineOfSight GetLineOfSight(Vector2 direction, float distance)
+        {
+            int count = Physics2D.Raycast(transform.position, direction, BlockingContactFilter, ProbeHits, distance);
+
+            RaycastHit2D? nearest = null;
+            for (int i = 0; i < count; i++)
+            {
+                // The ray starts at transform.position, which sits inside this enemy's own
+                // (now-solid) collider - without excluding it, every probe "hits" itself at
+                // distance ~0 and nothing would ever read as clear.
+                if (ProbeHits[i].collider == selfCollider)
+                {
+                    continue;
+                }
+
+                if (nearest == null || ProbeHits[i].distance < nearest.Value.distance)
+                {
+                    nearest = ProbeHits[i];
+                }
+            }
+
+            if (nearest == null || nearest.Value.collider.GetComponent<PlayerHealth>() != null)
+            {
+                return LineOfSight.Clear;
+            }
+
+            CoverObject cover = nearest.Value.collider.GetComponent<CoverObject>();
+            return cover != null && cover.Destructible ? LineOfSight.BlockedByCover : LineOfSight.Blocked;
+        }
+
+        /// <summary>
+        /// Sets the velocity Tick*'s state machine wants this frame - actually applied to the
+        /// Rigidbody2D in FixedUpdate, so movement goes through physics collision resolution
+        /// (walls/props/other enemies) instead of teleporting through them like a raw
+        /// transform.position write would.
+        /// </summary>
         private void Move(Vector2 direction, float speed)
         {
-            transform.position += (Vector3)(direction * speed * speedBuffMultiplier * Time.deltaTime);
+            desiredVelocity = SteerAroundObstacles(direction.normalized) * speed * speedBuffMultiplier;
+        }
+
+        /// <summary>
+        /// Whisker steering: if the desired direction is clear, use it unchanged (the common
+        /// case). Otherwise sweep SteeringAngleOffsets until one probes clear, so the enemy
+        /// slides along a wall/corner instead of shoving uselessly into it forever. Returns zero
+        /// only when every candidate is blocked (boxed in on all sides) - holding position that
+        /// frame rather than pushing into whatever's closest.
+        /// </summary>
+        private Vector2 SteerAroundObstacles(Vector2 desiredDirection)
+        {
+            if (desiredDirection.sqrMagnitude < 0.0001f)
+            {
+                return desiredDirection;
+            }
+
+            foreach (float angleOffset in SteeringAngleOffsets)
+            {
+                Vector2 candidate = Mathf.Approximately(angleOffset, 0f)
+                    ? desiredDirection
+                    : ((Vector2)(Quaternion.Euler(0f, 0f, angleOffset) * desiredDirection));
+
+                if (!IsBlocked(candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            return Vector2.zero;
+        }
+
+        /// <summary>True if something solid other than the player sits within ObstacleProbeDistance
+        /// along direction - the player itself must never register as an obstacle to steer away from.</summary>
+        private bool IsBlocked(Vector2 direction)
+        {
+            int count = Physics2D.Raycast(transform.position, direction, BlockingContactFilter, ProbeHits, ObstacleProbeDistance);
+            for (int i = 0; i < count; i++)
+            {
+                Collider2D hitCollider = ProbeHits[i].collider;
+                if (hitCollider == selfCollider)
+                {
+                    continue;
+                }
+
+                if (hitCollider.GetComponent<PlayerHealth>() == null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void FixedUpdate()
+        {
+            body.velocity = desiredVelocity + knockbackVelocity;
         }
 
         private void ApplyKnockbackDecay()
         {
             if (knockbackVelocity.sqrMagnitude < 0.0001f)
             {
+                knockbackVelocity = Vector2.zero;
                 return;
             }
 
-            transform.position += (Vector3)(knockbackVelocity * Time.deltaTime);
             knockbackVelocity = Vector2.Lerp(knockbackVelocity, Vector2.zero, KnockbackDamping * Time.deltaTime);
         }
 
@@ -490,14 +666,19 @@ namespace BeyProject.Combat
             isDischarging = false;
         }
 
-        private void OnTriggerStay2D(Collider2D other)
+        /// <summary>
+        /// Collision-based rather than trigger-based: the contact collider is now solid (so it
+        /// physically stops at walls/props - see the RequireComponent<Rigidbody2D> change
+        /// above), and a solid collider never fires OnTrigger* events.
+        /// </summary>
+        private void OnCollisionStay2D(Collision2D collision)
         {
             if (Time.time - lastContactDamageTime < ContactDamageIntervalSeconds)
             {
                 return;
             }
 
-            var playerHealth = other.GetComponent<PlayerHealth>();
+            var playerHealth = collision.collider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
                 lastContactDamageTime = Time.time;
@@ -505,7 +686,7 @@ namespace BeyProject.Combat
 
                 if (enemyType == EnemyType.ThermalLeech)
                 {
-                    var playerCombat = other.GetComponent<PlayerCombat>();
+                    var playerCombat = collision.collider.GetComponent<PlayerCombat>();
                     playerCombat?.DrainEnergy(energyDrainAmount);
                 }
             }

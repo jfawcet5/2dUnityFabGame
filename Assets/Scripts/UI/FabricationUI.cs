@@ -150,7 +150,7 @@ namespace BeyProject.UI
                         continue;
                     }
 
-                    if (ChipManager.Instance.GetEquipped(definition.chipSlot) == definition)
+                    if (ChipManager.Instance.GetEquipped(definition.chipModule.chipSlot) == definition)
                     {
                         continue;
                     }
@@ -240,11 +240,11 @@ namespace BeyProject.UI
             var builder = new StringBuilder();
             builder.AppendLine(previewModule.description);
 
-            if (!string.IsNullOrEmpty(previewModule.chipTradeoffDescription))
+            if (!string.IsNullOrEmpty(previewModule.chipModule.chipTradeoffDescription))
             {
                 string hex = ColorUtility.ToHtmlStringRGB(LossColor);
                 builder.AppendLine();
-                builder.Append($"<color=#{hex}>Tradeoff: {previewModule.chipTradeoffDescription}</color>");
+                builder.Append($"<color=#{hex}>Tradeoff: {previewModule.chipModule.chipTradeoffDescription}</color>");
             }
 
             moduleDetailText.text = builder.ToString();
@@ -340,7 +340,7 @@ namespace BeyProject.UI
             label.fontSize = 15;
             label.alignment = TextAnchor.MiddleLeft;
             label.color = Color.white;
-            label.text = $"{definition.displayName}\n<size=12><color=#9aa0b5>{definition.chipSlot} slot</color></size>";
+            label.text = $"{definition.displayName}\n<size=12><color=#9aa0b5>{definition.chipModule.chipSlot} slot</color></size>";
             StretchInto(labelGO, 10f, -76f);
 
             // Clicking the row previews; the explicit Install button commits. Selecting and

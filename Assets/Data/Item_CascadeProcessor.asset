@@ -20,19 +20,21 @@ MonoBehaviour:
   category: 5
   isKeyItem: 0
   icon: {fileID: 21300000, guid: 2d50caf4c19114b46b4d70708e838d6f, type: 3}
-  chipSlot: 2
-  processorBehavior: 1
-  batteryBonus: 0
-  cacheBonus: 0
-  coolingCostMultiplier: 1.25
-  coolingRegenMultiplier: 1
-  damageMultiplier: 0.75
-  projectileSizeMultiplier: 1
-  moveSpeedMultiplier: 1
-  reloadSpeedMultiplier: 1
-  fireRateMultiplier: 1.35
-  projectileSpeedMultiplier: 1.45
-  projectileCount: 2
-  homing: 0
-  chipOutputDescription: Cascading Twin-Bolt Stream
-  chipTradeoffDescription: +25% energy per shot; drains a standard battery quickly.
+  chipModule:
+    chipSlot: 2
+    processorBehavior: 1
+    batteryBonus: 0
+    cacheBonus: 0
+    coolingCostMultiplier: 1.25
+    coolingRegenMultiplier: 1
+    damageMultiplier: 0.75
+    projectileSizeMultiplier: 1
+    moveSpeedMultiplier: 1
+    reloadSpeedMultiplier: 1
+    fireRateMultiplier: 1.35
+    projectileSpeedMultiplier: 1.45
+    projectileCount: 2
+    homing: 0
+    projectileVisual: {fileID: 11400000, guid: 1c254b59669154472b94be161aa6c43e, type: 2}
+    chipOutputDescription: Cascading Twin-Bolt Stream
+    chipTradeoffDescription: +25% energy per shot; drains a standard battery quickly.

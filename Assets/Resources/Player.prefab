@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13de0625e8dd9402dacd795b134b1891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BoltColor: {r: 0, g: 0.97935414, b: 1, a: 1}
   aimIndicatorRenderer: {fileID: 0}
 --- !u!114 &3215885194046085315
 MonoBehaviour:

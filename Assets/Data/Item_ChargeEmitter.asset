@@ -20,20 +20,21 @@ MonoBehaviour:
   category: 5
   isKeyItem: 0
   icon: {fileID: 21300000, guid: 2d50caf4c19114b46b4d70708e838d6f, type: 3}
-  chipSlot: 2
-  processorBehavior: 6
-  batteryBonus: 0
-  cacheBonus: 0
-  coolingCostMultiplier: 1
-  coolingRegenMultiplier: 1
-  damageMultiplier: 1
-  projectileSizeMultiplier: 1
-  moveSpeedMultiplier: 1
-  reloadSpeedMultiplier: 1
-  fireRateMultiplier: 1
-  projectileSpeedMultiplier: 1
-  projectileCount: 1
-  homing: 0
-  chipOutputDescription: Charged Energy Lance
-  chipTradeoffDescription: No continuous fire - hold to charge, release for a shot
-    that hits far harder the longer you hold.
+  chipModule:
+    chipSlot: 2
+    processorBehavior: 6
+    batteryBonus: 0
+    cacheBonus: 0
+    coolingCostMultiplier: 1
+    coolingRegenMultiplier: 1
+    damageMultiplier: 1
+    projectileSizeMultiplier: 1
+    moveSpeedMultiplier: 1
+    reloadSpeedMultiplier: 1
+    fireRateMultiplier: 1
+    projectileSpeedMultiplier: 1
+    projectileCount: 1
+    homing: 0
+    chipOutputDescription: Charged Energy Lance
+    chipTradeoffDescription: No continuous fire - hold to charge, release for a shot
+      that hits far harder the longer you hold.

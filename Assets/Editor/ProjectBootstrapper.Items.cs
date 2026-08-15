@@ -246,22 +246,22 @@ namespace BeyProject.EditorTools
             item.category = ItemCategory.ChipModule;
             item.isKeyItem = false;
             item.icon = icon;
-            item.chipSlot = slot;
-            item.processorBehavior = processorBehavior;
-            item.batteryBonus = batteryBonus;
-            item.cacheBonus = cacheBonus;
-            item.coolingCostMultiplier = coolingCostMultiplier;
-            item.coolingRegenMultiplier = coolingRegenMultiplier;
-            item.damageMultiplier = damageMultiplier;
-            item.projectileCount = projectileCount;
-            item.projectileSizeMultiplier = projectileSizeMultiplier;
-            item.homing = homing;
-            item.moveSpeedMultiplier = moveSpeedMultiplier;
-            item.reloadSpeedMultiplier = reloadSpeedMultiplier;
-            item.fireRateMultiplier = fireRateMultiplier;
-            item.projectileSpeedMultiplier = projectileSpeedMultiplier;
-            item.chipOutputDescription = chipOutputDescription;
-            item.chipTradeoffDescription = chipTradeoffDescription;
+            item.chipModule.chipSlot = slot;
+            item.chipModule.processorBehavior = processorBehavior;
+            item.chipModule.batteryBonus = batteryBonus;
+            item.chipModule.cacheBonus = cacheBonus;
+            item.chipModule.coolingCostMultiplier = coolingCostMultiplier;
+            item.chipModule.coolingRegenMultiplier = coolingRegenMultiplier;
+            item.chipModule.damageMultiplier = damageMultiplier;
+            item.chipModule.projectileCount = projectileCount;
+            item.chipModule.projectileSizeMultiplier = projectileSizeMultiplier;
+            item.chipModule.homing = homing;
+            item.chipModule.moveSpeedMultiplier = moveSpeedMultiplier;
+            item.chipModule.reloadSpeedMultiplier = reloadSpeedMultiplier;
+            item.chipModule.fireRateMultiplier = fireRateMultiplier;
+            item.chipModule.projectileSpeedMultiplier = projectileSpeedMultiplier;
+            item.chipModule.chipOutputDescription = chipOutputDescription;
+            item.chipModule.chipTradeoffDescription = chipTradeoffDescription;
 
             return (ItemDefinition)CreateOrReplaceAsset(item, $"{DataFolder}/{assetName}.asset");
         }

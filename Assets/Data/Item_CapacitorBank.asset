@@ -20,19 +20,20 @@ MonoBehaviour:
   category: 5
   isKeyItem: 0
   icon: {fileID: 21300000, guid: 8aea1f37ee87c40929ed8c85ae50a92b, type: 3}
-  chipSlot: 0
-  processorBehavior: 0
-  batteryBonus: 30
-  cacheBonus: 0
-  coolingCostMultiplier: 1
-  coolingRegenMultiplier: 1.8
-  damageMultiplier: 0.85
-  projectileSizeMultiplier: 1
-  moveSpeedMultiplier: 1
-  reloadSpeedMultiplier: 1
-  fireRateMultiplier: 1
-  projectileSpeedMultiplier: 1
-  projectileCount: 1
-  homing: 0
-  chipOutputDescription: 
-  chipTradeoffDescription: -15% damage. Pairs well with Parallel Processing.
+  chipModule:
+    chipSlot: 0
+    processorBehavior: 0
+    batteryBonus: 30
+    cacheBonus: 0
+    coolingCostMultiplier: 1
+    coolingRegenMultiplier: 1.8
+    damageMultiplier: 0.85
+    projectileSizeMultiplier: 1
+    moveSpeedMultiplier: 1
+    reloadSpeedMultiplier: 1
+    fireRateMultiplier: 1
+    projectileSpeedMultiplier: 1
+    projectileCount: 1
+    homing: 0
+    chipOutputDescription: 
+    chipTradeoffDescription: -15% damage. Pairs well with Parallel Processing.

@@ -23,6 +23,11 @@ namespace BeyProject.Combat
         private float currentHealth;
         private Color baseColor;
 
+        /// <summary>Whether shooting this down is ever worthwhile - lets EnemyBase's
+        /// line-of-sight check tell "shoot at the crate, it'll break" apart from "don't bother,
+        /// permanent cover/wall."</summary>
+        public bool Destructible => destructible;
+
         private void Awake()
         {
             if (destructible && !string.IsNullOrEmpty(coverId) &&

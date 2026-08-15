@@ -9,9 +9,12 @@ public class HazardController : MonoBehaviour, IDamageable
     public string hazardControllerId;
     public List<HazardEffect> targetHazards = new List<HazardEffect>();
 
+    public HitFlash hitFlash;
+
     public float health;
     public void TakeDamage(float amount)
     {
+        hitFlash?.Flash(0.14f);
         health -= amount;
         if (health <= 0)
         {

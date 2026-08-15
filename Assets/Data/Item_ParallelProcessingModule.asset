@@ -20,19 +20,20 @@ MonoBehaviour:
   category: 5
   isKeyItem: 0
   icon: {fileID: 21300000, guid: 2d50caf4c19114b46b4d70708e838d6f, type: 3}
-  chipSlot: 2
-  processorBehavior: 1
-  batteryBonus: 0
-  cacheBonus: 0
-  coolingCostMultiplier: 1.3
-  coolingRegenMultiplier: 1
-  damageMultiplier: 0.45
-  projectileSizeMultiplier: 1
-  moveSpeedMultiplier: 1
-  reloadSpeedMultiplier: 1
-  fireRateMultiplier: 1
-  projectileSpeedMultiplier: 1
-  projectileCount: 3
-  homing: 0
-  chipOutputDescription: Multi-Projectile Energy Burst
-  chipTradeoffDescription: Each bolt does far less damage, and shots cost +30% energy.
+  chipModule:
+    chipSlot: 2
+    processorBehavior: 1
+    batteryBonus: 0
+    cacheBonus: 0
+    coolingCostMultiplier: 1.3
+    coolingRegenMultiplier: 1
+    damageMultiplier: 0.45
+    projectileSizeMultiplier: 1
+    moveSpeedMultiplier: 1
+    reloadSpeedMultiplier: 1
+    fireRateMultiplier: 1
+    projectileSpeedMultiplier: 1
+    projectileCount: 3
+    homing: 0
+    chipOutputDescription: Multi-Projectile Energy Burst
+    chipTradeoffDescription: Each bolt does far less damage, and shots cost +30% energy.

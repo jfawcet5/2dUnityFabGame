@@ -1,3 +1,5 @@
+using BeyProject.Data;
+
 namespace BeyProject.Core
 {
     /// <summary>
@@ -16,6 +18,10 @@ namespace BeyProject.Core
         public int projectileCount;
         public float projectileSizeMultiplier;
         public bool homing;
+
+        /// <summary>Highest-priority equipped module's custom projectile look, or null to use
+        /// the default placeholder bolt - see ChipManager.ComputeStats.</summary>
+        public ProjectileVisual projectileVisual;
 
         public float moveSpeedMultiplier;
         public float reloadSpeedMultiplier;

@@ -20,20 +20,21 @@ MonoBehaviour:
   category: 5
   isKeyItem: 0
   icon: {fileID: 21300000, guid: 2d50caf4c19114b46b4d70708e838d6f, type: 3}
-  chipSlot: 2
-  processorBehavior: 4
-  batteryBonus: 0
-  cacheBonus: 0
-  coolingCostMultiplier: 1.15
-  coolingRegenMultiplier: 1
-  damageMultiplier: 0.85
-  projectileSizeMultiplier: 1
-  moveSpeedMultiplier: 1
-  reloadSpeedMultiplier: 1
-  fireRateMultiplier: 1
-  projectileSpeedMultiplier: 1
-  projectileCount: 1
-  homing: 0
-  chipOutputDescription: Triple-Burst Energy Volley
-  chipTradeoffDescription: Fires a 3-round burst, then a forced recovery beat before
-    the next - can't be held for continuous fire.
+  chipModule:
+    chipSlot: 2
+    processorBehavior: 4
+    batteryBonus: 0
+    cacheBonus: 0
+    coolingCostMultiplier: 1.15
+    coolingRegenMultiplier: 1
+    damageMultiplier: 0.85
+    projectileSizeMultiplier: 1
+    moveSpeedMultiplier: 1
+    reloadSpeedMultiplier: 1
+    fireRateMultiplier: 1
+    projectileSpeedMultiplier: 1
+    projectileCount: 1
+    homing: 0
+    chipOutputDescription: Triple-Burst Energy Volley
+    chipTradeoffDescription: Fires a 3-round burst, then a forced recovery beat before
+      the next - can't be held for continuous fire.

@@ -1,4 +1,5 @@
 using BeyProject.Core;
+using BeyProject.Data;
 using BeyProject.Player;
 using UnityEngine;
 
@@ -9,11 +10,17 @@ namespace BeyProject.Combat
     /// philosophy as PlaceholderSprite.CreateSquare. isPlayerOwned decides which side it can
     /// damage: player-owned bolts hurt enemies/turrets/boss/props, enemy bolts hurt the player.
     /// Either way it dies on anything solid, so walls and cover actually stop shots.
+    ///
+    /// visual (optional) lets a caller hand in a ProjectileVisual - a looping sprite-sheet
+    /// animation (or a single static sprite) - instead of the default. Left null, a shot renders
+    /// exactly as before (PlaceholderSprite.SharedCircle, no cycling), so every existing call
+    /// site is unaffected.
     /// </summary>
     public class Projectile : MonoBehaviour
     {
         private const float Lifespan = 3f;
         private const float HomingTurnDegreesPerSecond = 220f;
+        private const float DefaultSecondsPerAnimationFrame = 0.06f;
 
         private Vector2 direction;
         private float speed;
@@ -23,9 +30,14 @@ namespace BeyProject.Combat
         private float age;
         private Color tint;
         private Rigidbody2D body;
+        private SpriteRenderer spriteRenderer;
+        private Sprite[] animationFrames;
+        private float secondsPerAnimationFrame;
+        private float animationTimer;
+        private int animationFrameIndex;
 
         public static Projectile Spawn(Vector3 position, Vector2 direction, float speed, float damage,
-            bool isPlayerOwned, bool homing, float sizeMultiplier, Color color)
+            bool isPlayerOwned, bool homing, float sizeMultiplier, Color color, ProjectileVisual visual = null)
         {
             var go = new GameObject("Projectile", typeof(Rigidbody2D), typeof(CircleCollider2D), typeof(SpriteRenderer), typeof(Projectile));
             go.transform.position = position;
@@ -39,8 +51,12 @@ namespace BeyProject.Combat
             collider.isTrigger = true;
             collider.radius = 0.5f;
 
+            Sprite[] frames = visual != null && visual.frames != null && visual.frames.Length > 0
+                ? visual.frames
+                : null;
+
             SpriteRenderer renderer = go.GetComponent<SpriteRenderer>();
-            renderer.sprite = PlaceholderSprite.SharedCircle();
+            renderer.sprite = frames != null ? frames[0] : PlaceholderSprite.SharedCircle();
             renderer.color = color;
             renderer.sortingOrder = 6;
 
@@ -52,6 +68,11 @@ namespace BeyProject.Combat
             projectile.homing = homing;
             projectile.tint = color;
             projectile.body = body;
+            projectile.spriteRenderer = renderer;
+            projectile.animationFrames = frames != null && frames.Length > 1 ? frames : null;
+            projectile.secondsPerAnimationFrame = visual != null && visual.secondsPerFrame > 0f
+                ? visual.secondsPerFrame
+                : DefaultSecondsPerAnimationFrame;
 
             return projectile;
         }
@@ -79,7 +100,22 @@ namespace BeyProject.Combat
             if (age >= Lifespan)
             {
                 Destroy(gameObject);
+                return;
             }
+
+            if (animationFrames == null)
+            {
+                return;
+            }
+
+            animationTimer += Time.deltaTime;
+            while (animationTimer >= secondsPerAnimationFrame)
+            {
+                animationTimer -= secondsPerAnimationFrame;
+                animationFrameIndex = (animationFrameIndex + 1) % animationFrames.Length;
+            }
+
+            spriteRenderer.sprite = animationFrames[animationFrameIndex];
         }
 
         private Transform FindNearestTargetTransform()

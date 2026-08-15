@@ -745,7 +745,7 @@ MonoBehaviour:
     flagKey: 
   - type: 1
     dialogue: {fileID: 0}
-    item: {fileID: 11400000, guid: 73563ef132b504d2683e4e4f74ceafe2, type: 2}
+    item: {fileID: 11400000, guid: 38908f2c05c3a4d4d9e37a01cad41e9b, type: 2}
     itemQuantity: 1
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
@@ -2120,6 +2120,7 @@ GameObject:
   - component: {fileID: 980367497}
   - component: {fileID: 980367499}
   - component: {fileID: 980367500}
+  - component: {fileID: 980367501}
   m_Layer: 0
   m_Name: interactable_power_panel_01
   m_TagString: Untagged
@@ -2254,7 +2255,22 @@ MonoBehaviour:
   hazardControllerId: hazard_controller_supply_closet01
   targetHazards:
   - {fileID: 1347589442}
+  hitFlash: {fileID: 980367501}
   health: 30
+--- !u!114 &980367501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980367496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ed6636708d5a453fbe7af566ac9b0b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 980367497}
+  flashColor: {r: 1, g: 0.9019608, b: 0.88235295, a: 1}
 --- !u!1 &1068471194
 GameObject:
   m_ObjectHideFlags: 0

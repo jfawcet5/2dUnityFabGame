@@ -1200,7 +1200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6258769432264739797, guid: 15cf1c86701464278844bd7fa116b1d7, type: 3}
       propertyPath: maxHealth
-      value: 55
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6258769432264739797, guid: 15cf1c86701464278844bd7fa116b1d7, type: 3}
       propertyPath: projectileDamage
@@ -3482,6 +3482,10 @@ PrefabInstance:
       propertyPath: enemyId
       value: cleanroom01_enemy_overclocker_01
       objectReference: {fileID: 0}
+    - target: {fileID: 7983384932121638971, guid: 14e4ac5eab7014313931a7a8c0984e5b, type: 3}
+      propertyPath: maxHealth
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 8253840063355733452, guid: 14e4ac5eab7014313931a7a8c0984e5b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.6680102
@@ -4110,6 +4114,10 @@ PrefabInstance:
       propertyPath: enemyId
       value: cleanroom01_enemy_fast_01
       objectReference: {fileID: 0}
+    - target: {fileID: 989109904332096127, guid: faadbad562a0944a5b828e01fb57f7ed, type: 3}
+      propertyPath: maxHealth
+      value: 58
+      objectReference: {fileID: 0}
     - target: {fileID: 5151420288967229660, guid: faadbad562a0944a5b828e01fb57f7ed, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.8319898
@@ -4495,6 +4503,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8490861984107927073, guid: 074461ec6754f493c8e65056ead7dd08, type: 3}
+      propertyPath: maxHealth
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 8596527261911716243, guid: 074461ec6754f493c8e65056ead7dd08, type: 3}
       propertyPath: m_Name
       value: Enemy - Leech
@@ -4548,6 +4560,18 @@ PrefabInstance:
     - target: {fileID: 2682202783646169813, guid: 29c651f1fe0c74a3abe67446154b9293, type: 3}
       propertyPath: enemyId
       value: cleanroom01_enemy_basic_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2682202783646169813, guid: 29c651f1fe0c74a3abe67446154b9293, type: 3}
+      propertyPath: maxHealth
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 2682202783646169813, guid: 29c651f1fe0c74a3abe67446154b9293, type: 3}
+      propertyPath: preferredRange
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2682202783646169813, guid: 29c651f1fe0c74a3abe67446154b9293, type: 3}
+      propertyPath: attackIntervalSeconds
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 7609951608525148297, guid: 29c651f1fe0c74a3abe67446154b9293, type: 3}
       propertyPath: m_LocalPosition.x

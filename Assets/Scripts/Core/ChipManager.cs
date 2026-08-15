@@ -52,7 +52,7 @@ namespace BeyProject.Core
                 return;
             }
 
-            switch (module.chipSlot)
+            switch (module.chipModule.chipSlot)
             {
                 case ChipSlotType.Battery:
                     equippedBattery = module.id;
@@ -132,11 +132,18 @@ namespace BeyProject.Core
             float maxEnergyBonus = 0f;
             int burstBonus = 0;
 
+            // Every equipped module's damageMultiplier also votes on projectile size (see
+            // below) - an empty/neutral slot votes the baseline 1f, same as the multiplicative
+            // stat fields already implicitly treat it via the "module == null" skip.
+            float damageSum = 0f;
+            ProjectileVisual resolvedVisual = null;
+            int resolvedVisualPriority = -1;
+
             foreach (ChipSlotType slot in AllSlots)
             {
                 ItemDefinition module = GetEquipped(slot);
 
-                if (overrideModule != null && overrideModule.chipSlot == slot)
+                if (overrideModule != null && overrideModule.chipModule.chipSlot == slot)
                 {
                     module = overrideModule;
                 }
@@ -145,27 +152,39 @@ namespace BeyProject.Core
                     module = null;
                 }
 
+                damageSum += module != null ? module.chipModule.damageMultiplier : 1f;
+
+                if (module != null && module.chipModule.projectileVisual != null)
+                {
+                    int priority = VisualPriority(slot);
+                    if (priority > resolvedVisualPriority)
+                    {
+                        resolvedVisual = module.chipModule.projectileVisual;
+                        resolvedVisualPriority = priority;
+                    }
+                }
+
                 if (module == null)
                 {
                     continue;
                 }
 
-                maxEnergyBonus += module.batteryBonus;
-                burstBonus += module.cacheBonus;
+                maxEnergyBonus += module.chipModule.batteryBonus;
+                burstBonus += module.chipModule.cacheBonus;
 
-                stats.shotEnergyCost *= module.coolingCostMultiplier;
-                stats.energyRegenRate *= module.coolingRegenMultiplier;
-                stats.damageMultiplier *= module.damageMultiplier;
-                stats.projectileSizeMultiplier *= module.projectileSizeMultiplier;
-                stats.moveSpeedMultiplier *= module.moveSpeedMultiplier;
-                stats.reloadSpeedMultiplier *= module.reloadSpeedMultiplier;
-                stats.fireRateMultiplier *= module.fireRateMultiplier;
-                stats.projectileSpeedMultiplier *= module.projectileSpeedMultiplier;
+                stats.shotEnergyCost *= module.chipModule.coolingCostMultiplier;
+                stats.energyRegenRate *= module.chipModule.coolingRegenMultiplier;
+                stats.damageMultiplier *= module.chipModule.damageMultiplier;
+                stats.projectileSizeMultiplier *= module.chipModule.projectileSizeMultiplier;
+                stats.moveSpeedMultiplier *= module.chipModule.moveSpeedMultiplier;
+                stats.reloadSpeedMultiplier *= module.chipModule.reloadSpeedMultiplier;
+                stats.fireRateMultiplier *= module.chipModule.fireRateMultiplier;
+                stats.projectileSpeedMultiplier *= module.chipModule.projectileSpeedMultiplier;
 
                 // Multiplied rather than assigned so a future splitter in a second slot
                 // compounds with the processor instead of silently overwriting it.
-                stats.projectileCount *= Mathf.Max(1, module.projectileCount);
-                stats.homing |= module.homing;
+                stats.projectileCount *= Mathf.Max(1, module.chipModule.projectileCount);
+                stats.homing |= module.chipModule.homing;
             }
 
             stats.maxEnergy = Mathf.Max(10f, stats.maxEnergy + maxEnergyBonus);
@@ -173,15 +192,43 @@ namespace BeyProject.Core
             stats.shotEnergyCost = Mathf.Max(1f, stats.shotEnergyCost);
             stats.projectileCount = Mathf.Clamp(stats.projectileCount, 1, 12);
 
+            // Standardized visual influence: higher-damage modules read as a visually bigger
+            // shot, lower-damage ones read as smaller, averaged (not multiplied) across all 4
+            // slots so it's weighed against whatever else is equipped instead of compounding
+            // without bound as more modules are added later. Layered on top of any explicitly
+            // hand-authored projectileSizeMultiplier, then clamped the same defensive way
+            // projectileCount is above.
+            float sizeFromDamage = damageSum / AllSlots.Length;
+            stats.projectileSizeMultiplier = Mathf.Clamp(stats.projectileSizeMultiplier * sizeFromDamage, 0.4f, 3f);
+
+            stats.projectileVisual = resolvedVisual;
+
             return stats;
+        }
+
+        /// <summary>
+        /// Which slot's projectileVisual wins when more than one equipped module sets one -
+        /// Processor first, matching GetOutputDescription's existing precedent that Processor
+        /// is authoritative for the weapon's identity, then Battery/Cache/Cooling as a
+        /// deterministic tie-break.
+        /// </summary>
+        private static int VisualPriority(ChipSlotType slot)
+        {
+            switch (slot)
+            {
+                case ChipSlotType.Processor: return 3;
+                case ChipSlotType.Battery: return 2;
+                case ChipSlotType.Cache: return 1;
+                default: return 0;
+            }
         }
 
         public string GetOutputDescription()
         {
             ItemDefinition processor = GetEquipped(ChipSlotType.Processor);
-            if (processor != null && !string.IsNullOrEmpty(processor.chipOutputDescription))
+            if (processor != null && !string.IsNullOrEmpty(processor.chipModule.chipOutputDescription))
             {
-                return processor.chipOutputDescription;
+                return processor.chipModule.chipOutputDescription;
             }
 
             return "Standard Energy Bolt";
