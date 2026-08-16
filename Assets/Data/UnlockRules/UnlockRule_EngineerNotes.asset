@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a6b6fc5eed414b9b1a2aa805015f76, type: 3}
+  m_Name: UnlockRule_EngineerNotes
+  m_EditorClassIdentifier:
+  unlockKey: item_capacitor_bank_01_unlocked
+  triggerType: 0
+  triggerItem: {fileID: 11400000, guid: 40d63a0cc6f304002b96f1aace2d05ec, type: 2}
+  bossId:
+  requiredCount: 1
+  requiredItems: []
+  unlockMessage: Engineer Notes reference a redesigned capacitor bank - Capacitor Bank is now available for fabrication.

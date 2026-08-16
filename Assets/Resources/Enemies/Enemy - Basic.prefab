@@ -183,6 +183,7 @@ MonoBehaviour:
   contactDamage: 8
   spriteRenderer: {fileID: 8734617178136942140}
   hitFlash: {fileID: 6061613923445711586}
+  deathLootPool: {fileID: 11400000, guid: 420f7fef0e5c46cda32d4af243f4ab8d, type: 2}
   canShoot: 1
   preferredRange: 5
   attackIntervalSeconds: 2.3

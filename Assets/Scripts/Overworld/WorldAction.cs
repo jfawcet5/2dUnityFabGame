@@ -27,6 +27,8 @@ namespace BeyProject.Overworld
         [Header("GiveItem")]
         public ItemDefinition item;
         public int itemQuantity = 1;
+        [Tooltip("If set, rolled fresh each time this action fires instead of always giving item.")]
+        public LootPool lootPool;
 
         [Header("LaunchInteface")]
         public GameObject interfaceInteractable;
@@ -55,31 +57,21 @@ namespace BeyProject.Overworld
 
             for (int i = startIndex; i < actions.Length; i++)
             {
-                WorldAction action = actions[i];
-
-                if (action.type == InteractionActionType.ShowDialogue && action.dialogue != null && DialogueUI.Instance != null)
+                if (!RunImmediateAction(actions, interactor, i))
                 {
-                    int resumeIndex = i + 1;
-                    DialogueUI.Instance.Show(action.dialogue.speakerName, action.dialogue.lines,
-                        () => Execute(actions, interactor, resumeIndex));
-                    return; // pause here - the rest resumes via the dialogue's completion callback
+                    return;
                 }
-
-                RunImmediateAction(action, interactor);
             }
         }
 
-        private static void RunImmediateAction(WorldAction action, GameObject interactor)
+        private static bool RunImmediateAction(WorldAction[] actions, GameObject interactor, int index)
         {
+            WorldAction action = actions[index];
+
             switch (action.type)
             {
                 case InteractionActionType.GiveItem:
-                    if (action.item != null && Inventory.Instance != null)
-                    {
-                        Inventory.Instance.AddItem(action.item, action.itemQuantity);
-                        DialogueUI.Instance?.Show("", new string[] { $"Obtained: {action.item.displayName} x{action.itemQuantity}" }, null);
-                    }
-                    break;
+                    return !GiveItem(action);
 
                 case InteractionActionType.UnlockDoor:
                     if (action.doorToUnlock != null)
@@ -104,9 +96,48 @@ namespace BeyProject.Overworld
                     break;
 
                 case InteractionActionType.ShowDialogue:
-                    // No dialogue asset assigned or no DialogueUI available - nothing to show.
+                    if (action.dialogue != null && DialogueUI.Instance != null)
+                    {
+                        int resumeIndex = index + 1;
+                        DialogueUI.Instance.Show(action.dialogue.speakerName, action.dialogue.lines,
+                            () => Execute(actions, interactor, resumeIndex));
+                        return false; // pause here - the rest resumes via the dialogue's completion callback
+                    }
                     break;
             }
+
+            return true;
+        }
+
+        private static bool GiveItem(WorldAction action)
+        {
+            ItemDefinition resolvedItem = action.item;
+            int resolvedQuantity = action.itemQuantity;
+
+            // Rolled fresh every time this action fires
+            if (action.lootPool != null)
+            {
+                LootPoolEntry picked = action.lootPool.Roll();
+                resolvedItem = picked?.item;
+                resolvedQuantity = picked?.quantity ?? 0;
+            }
+
+            bool alreadyDiscovered = resolvedItem != null && resolvedItem.category == ItemCategory.Document
+                && MetaProgress.Instance != null && MetaProgress.Instance.IsLoreDiscovered(resolvedItem.id);
+
+            if (resolvedItem != null && !alreadyDiscovered && Inventory.Instance != null)
+            {
+                Inventory.Instance.AddItem(resolvedItem, resolvedQuantity);
+                UnlockManager.Instance?.ReportItemDiscovered(resolvedItem);
+                if (resolvedItem.category == ItemCategory.Document)
+                {
+                    MetaProgress.Instance?.MarkLoreDiscovered(resolvedItem.id);
+                }
+                DialogueUI.Instance?.Show("", new string[] { $"Obtained: {resolvedItem.displayName} x{resolvedQuantity}" }, null);
+                return true;
+            }
+
+            return false;
         }
     }
 }

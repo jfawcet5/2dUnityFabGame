@@ -7,9 +7,9 @@ using UnityEngine;
 namespace BeyProject.Player
 {
     /// <summary>
-    /// Player's combat health. On death: brief message, respawn at StartRoom with health
-    /// reset. No permanent loss of components/inventory - a checkpoint respawn, not a run
-    /// reset, matching the "no permanent meta upgrades" scope restriction for this milestone.
+    /// Player's combat health. On death: brief message, then the run ends Isaac-style -
+    /// GameManager.EndRun() wipes inventory/equipped chip/flags and the player returns to the
+    /// hub with full health/energy rather than a same-run checkpoint respawn.
     /// Brief invulnerability after each hit keeps contact damage and overlapping hazards from
     /// draining the whole bar in a single frame.
     /// </summary>
@@ -143,7 +143,7 @@ namespace BeyProject.Player
 
             if (DialogueUI.Instance != null)
             {
-                DialogueUI.Instance.Show("System", new[] { "Systems disabled - returning to start." }, OnDeathMessageComplete);
+                DialogueUI.Instance.Show("System", new[] { "Run failed - systems reset. Returning to the hub." }, OnDeathMessageComplete);
             }
             else
             {
@@ -156,7 +156,8 @@ namespace BeyProject.Player
             CurrentHealth = maxHealth;
             isDying = false;
             invulnerableUntil = Time.time + InvulnerabilitySeconds;
-            GameManager.Instance?.TravelToRoom("MainLobbyScene", "main_lobby_start", transform.position);
+            GameManager.Instance?.EndRun();
+            GameManager.Instance?.TravelToRoom("MainHubScene", "main_hub_spawn", transform.position, restoreCombatState: false);
         }
 
         public void TakeDamage(float amount, bool bypassInvulnerability = false)

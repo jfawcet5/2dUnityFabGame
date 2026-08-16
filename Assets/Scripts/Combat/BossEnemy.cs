@@ -299,6 +299,7 @@ namespace BeyProject.Combat
             isDefeated = true;
             StopAllCoroutines();
             SaveSystem.Instance?.SetFlag($"boss_defeated_{bossId}");
+            UnlockManager.Instance?.ReportBossDefeated(bossId);
 
             SetGroupActive(phaseTwoHazards, false);
             SetGroupActive(phaseThreeHazards, false);
@@ -313,7 +314,8 @@ namespace BeyProject.Combat
 
         private void OnVictoryDialogueComplete()
         {
-            GameManager.Instance?.TravelToRoom(returnSceneName, returnSpawnPointId, returnFallbackPosition);
+            GameManager.Instance?.EndRun();
+            GameManager.Instance?.TravelToRoom(returnSceneName, returnSpawnPointId, returnFallbackPosition, restoreCombatState: false);
             Destroy(gameObject);
         }
 

@@ -368,8 +368,8 @@ MonoBehaviour:
   newGameButton: {fileID: 1444429657}
   continueButton: {fileID: 1836903322}
   quitButton: {fileID: 2083251823}
-  startingRoomScene: MainLobbyScene
-  startingSpawnPointId: main_lobby_start
+  startingRoomScene: MainHubScene
+  startingSpawnPointId: main_hub_spawn
   startingFallbackPosition: {x: 2.5, y: 4.5}
 --- !u!4 &724987440
 Transform:

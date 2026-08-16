@@ -160,6 +160,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -318,6 +319,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -476,6 +478,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -736,17 +739,19 @@ MonoBehaviour:
   interactableId: supply_closet01_rack_02
   oneShot: 1
   actions:
-  - type: 0
-    dialogue: {fileID: 11400000, guid: 91e55881c39864046a66c72c1742d524, type: 2}
+  - type: 1
+    dialogue: {fileID: 0}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 11400000, guid: a78e70012757648559dc7c2d072d7d73, type: 2}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
-  - type: 1
-    dialogue: {fileID: 0}
-    item: {fileID: 11400000, guid: 38908f2c05c3a4d4d9e37a01cad41e9b, type: 2}
+  - type: 0
+    dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
+    item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -905,6 +910,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -1063,6 +1069,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -1221,6 +1228,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -2108,6 +2116,83 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!1001 &900100002
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 930451977823154885, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8aea1f37ee87c40929ed8c85ae50a92b, type: 3}
+    - target: {fileID: 930451977823154885, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1132745507117525462, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_Name
+      value: ItemPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: lootPool
+      value: 
+      objectReference: {fileID: 11400000, guid: 33d713cf271d41788a36de9e1873a347, type: 2}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: pickupId
+      value: supply_closet01_pool_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: itemDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b2b5b3e3dea842689fe98497dda5b25, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
 --- !u!1 &980367496
 GameObject:
   m_ObjectHideFlags: 0
@@ -2309,6 +2394,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 91e55881c39864046a66c72c1742d524, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -2316,6 +2402,7 @@ MonoBehaviour:
     dialogue: {fileID: 0}
     item: {fileID: 11400000, guid: abcb2d86986f74dbeb60140afefd75af, type: 2}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -3973,10 +4060,19 @@ MonoBehaviour:
   interactableId: supply_closet01_rack_11
   oneShot: 1
   actions:
+  - type: 1
+    dialogue: {fileID: 0}
+    item: {fileID: 0}
+    itemQuantity: 1
+    lootPool: {fileID: 11400000, guid: 5c9bd761841ae48e3aefa3c0b5f62748, type: 2}
+    interfaceInteractable: {fileID: 0}
+    doorToUnlock: {fileID: 0}
+    flagKey: 
   - type: 0
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -4196,10 +4292,19 @@ MonoBehaviour:
   interactableId: supply_closet01_rack_05
   oneShot: 1
   actions:
+  - type: 1
+    dialogue: {fileID: 0}
+    item: {fileID: 0}
+    itemQuantity: 1
+    lootPool: {fileID: 11400000, guid: 9faf3076e3f53415fb30bf831b0ec30e, type: 2}
+    interfaceInteractable: {fileID: 0}
+    doorToUnlock: {fileID: 0}
+    flagKey: 
   - type: 0
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -4480,6 +4585,7 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -4667,6 +4773,10 @@ PrefabInstance:
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: pickupId
       value: key_item_wrench
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: requiresInteraction
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6949,6 +7059,15 @@ MonoBehaviour:
     dialogue: {fileID: 11400000, guid: 12e4685b3952545fea0b4d6f77e8e207, type: 2}
     item: {fileID: 0}
     itemQuantity: 1
+    lootPool: {fileID: 0}
+    interfaceInteractable: {fileID: 0}
+    doorToUnlock: {fileID: 0}
+    flagKey: 
+  - type: 1
+    dialogue: {fileID: 11400000, guid: 91e55881c39864046a66c72c1742d524, type: 2}
+    item: {fileID: 11400000, guid: c59bbc68539d5459a88b7a93664074af, type: 2}
+    itemQuantity: 1
+    lootPool: {fileID: 0}
     interfaceInteractable: {fileID: 0}
     doorToUnlock: {fileID: 0}
     flagKey: 
@@ -7002,3 +7121,4 @@ SceneRoots:
   - {fileID: 368579546}
   - {fileID: 520489713}
   - {fileID: 2063303472}
+  - {fileID: 900100002}

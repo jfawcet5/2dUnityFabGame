@@ -69,6 +69,30 @@ namespace BeyProject.Core
             }
         }
 
+        /// <summary>Clears Battery/Cache/Cooling and installs the player's selected starting
+        /// Processor (MetaProgress.SelectedStartingProcessorId, if any and still valid) - used
+        /// when a run ends (death/clear) or a new game starts, so a fresh run never inherits
+        /// the previous run's build but does start with the player's chosen "gun type."</summary>
+        public void ResetToDefaults()
+        {
+            Uninstall(ChipSlotType.Battery);
+            Uninstall(ChipSlotType.Cache);
+            Uninstall(ChipSlotType.Cooling);
+
+            ItemDefinition startingProcessor = MetaProgress.Instance != null
+                ? itemDatabase?.GetById(MetaProgress.Instance.SelectedStartingProcessorId)
+                : null;
+
+            if (startingProcessor != null)
+            {
+                Install(startingProcessor);
+            }
+            else
+            {
+                Uninstall(ChipSlotType.Processor);
+            }
+        }
+
         /// <summary>Returns a slot to its baseline "Standard" state.</summary>
         public void Uninstall(ChipSlotType slot)
         {

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a6b6fc5eed414b9b1a2aa805015f76, type: 3}
+  m_Name: UnlockRule_LithographyMask
+  m_EditorClassIdentifier:
+  unlockKey: item_focusing_algorithm_module_01_unlocked
+  triggerType: 0
+  triggerItem: {fileID: 11400000, guid: f309385751a6c4e43a4ee8464d918790, type: 2}
+  bossId:
+  requiredCount: 1
+  requiredItems: []
+  unlockMessage: The mask's precision pattern maps cleanly onto a focusing algorithm - Focusing Algorithm Module is now available for fabrication.

@@ -57,15 +57,30 @@ namespace BeyProject.Core
         /// General-purpose room transition: door walk-throughs, "New Game," and save-file
         /// loads all funnel through this one method. Spawns the player at the RoomSpawnPoint
         /// matching spawnPointId, or at fallbackPosition if spawnPointId is null/not found.
+        /// restoreCombatState carries the outgoing Player's health/energy/burst into the new
+        /// scene's Player (the normal room-to-room case) - pass false to instead let the new
+        /// Player's own fresh Awake()/Start() values stand, e.g. returning to the hub after
+        /// EndRun() where a clean slate is wanted instead of whatever was left over.
         /// </summary>
-        public void TravelToRoom(string sceneName, string spawnPointId, Vector2 fallbackPosition)
+        public void TravelToRoom(string sceneName, string spawnPointId, Vector2 fallbackPosition, bool restoreCombatState = true)
         {
-            StartCoroutine(TravelToRoomRoutine(sceneName, spawnPointId, fallbackPosition));
+            StartCoroutine(TravelToRoomRoutine(sceneName, spawnPointId, fallbackPosition, restoreCombatState));
         }
 
-        private IEnumerator TravelToRoomRoutine(string sceneName, string spawnPointId, Vector2 fallbackPosition)
+        /// <summary>Wipes run-scoped state (inventory, equipped chip, all flags) - call before
+        /// TravelToRoom(..., restoreCombatState: false) on death or boss-clear so the run
+        /// actually resets Isaac-style instead of just checkpointing.</summary>
+        public void EndRun()
         {
-            CachePlayerCombatState();
+            SaveSystem.Instance?.ResetToDefaults();
+        }
+
+        private IEnumerator TravelToRoomRoutine(string sceneName, string spawnPointId, Vector2 fallbackPosition, bool restoreCombatState)
+        {
+            if (restoreCombatState)
+            {
+                CachePlayerCombatState();
+            }
 
             if (SceneFadeUI.Instance != null)
             {
@@ -113,7 +128,10 @@ namespace BeyProject.Core
             // resources) has definitely already run before we override it - otherwise this
             // and Start() would race depending on exactly when Unity schedules Start().
             yield return null;
-            RestorePlayerCombatState(loadedPlayer);
+            if (restoreCombatState)
+            {
+                RestorePlayerCombatState(loadedPlayer);
+            }
 
             if (SceneFadeUI.Instance != null)
             {

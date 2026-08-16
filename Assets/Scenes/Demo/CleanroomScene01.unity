@@ -6343,6 +6343,14 @@ PrefabInstance:
       propertyPath: choiceGroupId
       value: cleanroom_capacitor_item_01
       objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: requiredUnlock
+      value: item_capacitor_bank_01_unlocked
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: lockedHint
+      value: Locked - requires the redesigned capacitor schematics.
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18335,3 +18343,84 @@ SceneRoots:
   - {fileID: 1238284601}
   - {fileID: 896869006}
   - {fileID: 937117670}
+--- !u!1001 &900100001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 930451977823154885, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8aea1f37ee87c40929ed8c85ae50a92b, type: 3}
+    - target: {fileID: 930451977823154885, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1132745507117525462, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_Name
+      value: ItemPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 16.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 860d15609eba4e99aa7fbabb21b06961, type: 2}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: pickupId
+      value: cleanroom01_item_02_charge_emitter
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: requiredUnlock
+      value: item_charge_emitter_01_unlocked
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: lockedHint
+      value: Locked - requires insight from the failed experiment log.
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}

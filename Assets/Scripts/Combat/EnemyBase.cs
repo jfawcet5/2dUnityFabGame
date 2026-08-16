@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using BeyProject.Core;
+using BeyProject.Data;
+using BeyProject.Overworld;
 using BeyProject.Player;
 using UnityEngine;
 
@@ -73,6 +75,9 @@ namespace BeyProject.Combat
         [SerializeField] private float contactDamage = 8f;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private HitFlash hitFlash;
+
+        [Tooltip("Optional - rolled fresh on death. Null means this enemy never drops anything, same as today.")]
+        [SerializeField] private LootPool deathLootPool;
 
         [Header("Ranged attack (Basic / Defensive) - also reused by Capacitor's discharge")]
         [SerializeField] private bool canShoot = true;
@@ -621,9 +626,36 @@ namespace BeyProject.Combat
             {
                 SaveSystem.Instance?.SetFlag($"enemy_defeated_{enemyId}");
                 CombatFeedback.Death(transform.position, baseColor);
+                TrySpawnDrop();
                 Defeated?.Invoke();
                 Destroy(gameObject);
             }
+        }
+
+        /// <summary>Rolled fresh on every death (no sticky cache - enemy_defeated_{enemyId}
+        /// already guarantees this enemy can never die, and therefore roll, twice in one run).
+        /// Most enemies leave deathLootPool unset and drop nothing, same as today.</summary>
+        private void TrySpawnDrop()
+        {
+            if (deathLootPool == null)
+            {
+                return;
+            }
+
+            LootPoolEntry picked = deathLootPool.Roll();
+            if (picked?.item == null)
+            {
+                return;
+            }
+
+            GameObject prefab = Resources.Load<GameObject>("LevelDesign/ItemPickup");
+            if (prefab == null)
+            {
+                return;
+            }
+
+            GameObject drop = Instantiate(prefab, transform.position, Quaternion.identity);
+            drop.GetComponent<ItemPickup>()?.InitializeAsDrop(picked.item, picked.quantity);
         }
 
         /// <summary>

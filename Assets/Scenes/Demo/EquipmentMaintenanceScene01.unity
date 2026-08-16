@@ -529,11 +529,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 2b39eac7af6a345a8a4a8e6507ed7b4f, type: 2}
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: pickupId
-      value: equipment_maintenance_pickup_01
+      value: equipment_maintenance_pickup_02
       objectReference: {fileID: 0}
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: lockedHint
-      value: Clear the room first
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: requiredFlag
@@ -546,6 +546,10 @@ PrefabInstance:
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: choiceWarning
       value: You selected Focusing Algorithm
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: requiredUnlock
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1906,6 +1910,87 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 569217b0f721242b9ad9e91860729160, type: 3}
+--- !u!1001 &900100004
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 930451977823154885, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8aea1f37ee87c40929ed8c85ae50a92b, type: 3}
+    - target: {fileID: 930451977823154885, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1132745507117525462, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_Name
+      value: ItemPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5883153355516313628, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: f9e06ace24fa04e5ca0851478f76ea33, type: 2}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: pickupId
+      value: equipment_maintenance_item_02_predictive_targeting
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: lockedHint
+      value: Locked - requires the prototype documentation.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: requiredUnlock
+      value: item_predictive_targeting_module_01_unlocked
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
 --- !u!1001 &1037338586
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2718,7 +2803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: lockedHint
-      value: Clear the room first
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: requiredFlag
@@ -2731,6 +2816,10 @@ PrefabInstance:
     - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
       propertyPath: choiceWarning
       value: You selected Cascade Processor
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494595331891764471, guid: a0c2e507265674359bf63e1ca37dc353, type: 3}
+      propertyPath: requiredUnlock
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7752,3 +7841,4 @@ SceneRoots:
   - {fileID: 362393543}
   - {fileID: 1037338586}
   - {fileID: 849488524}
+  - {fileID: 900100004}

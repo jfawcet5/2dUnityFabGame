@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a6b6fc5eed414b9b1a2aa805015f76, type: 3}
+  m_Name: UnlockRule_InternalEmail
+  m_EditorClassIdentifier:
+  unlockKey: item_streamlined_cache_01_unlocked
+  triggerType: 0
+  triggerItem: {fileID: 11400000, guid: eb7cc6375e1704da6a55614dcfe8722a, type: 2}
+  bossId:
+  requiredCount: 1
+  requiredItems: []
+  unlockMessage: The internal memo's efficiency initiative paid off - Streamlined Cache is now available for fabrication.
